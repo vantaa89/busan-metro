@@ -16,8 +16,8 @@ import { useState, useEffect, useRef } from 'react';
 
 function App() {
   const mapRef = useRef(null);
-  const [stations, setStations] = useState([])
-  const [vectorSource, setVectorSource] = useState(new VectorSource());
+  const [stations, setStations] = useState([]) // 역의 목록. [{name: "서면역", lon: 127, lon: 34, line: "1호선"}, ... ] 과 같은 dictionary의 list
+  const [vectorSource, setVectorSource] = useState(new VectorSource()); // 역을 지도에 그리는 layer
 
   const loadData = function(){
     fetch( './data/line1.csv' )
@@ -42,7 +42,7 @@ function App() {
           radius: 3,
           fill: new Fill({ color: 'white' }),
           stroke: new Stroke({
-            color: [240, 106, 0], 
+            color: [240, 106, 0], // 부산 1호선 고유색. 다른 호선 추가시 수정 필요
             width: 2,
           }),
         }),
@@ -66,15 +66,17 @@ function App() {
   }, []);
 
   useEffect(() => {
-    stations.map(station => {
+    let newVectorSource = vectorSource;
+
+    stations.map(station => { // stations에 들어있는 각 dictionary(station)에 대해 이 함수를 적용
       const pointFeature = new Feature({
         geometry: new Point(fromLonLat([station.lon, station.lat])), 
-      });
+      })
       console.log(`Added ${station.name}, ${station.lon}, ${station.lat}`);
-      let newVectorSource = vectorSource;
-      newVectorSource.addFeature(pointFeature);
-      setVectorSource(newVectorSource);
+      newVectorSource.addFeature(pointFeature); // 해당 point를 지도에 표시되는 layer에 추가
     });
+
+    setVectorSource(newVectorSource);
   }, [stations])
   return (
     <div className="App">
