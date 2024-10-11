@@ -40,7 +40,11 @@ function App() {
       style: new Style({
         image: new CircleStyle({
           radius: 3,
-          fill: new Fill({ color: [240, 106, 0] }),
+          fill: new Fill({ color: 'white' }),
+          stroke: new Stroke({
+            color: [240, 106, 0], 
+            width: 2,
+          }),
         }),
       }),
     });
