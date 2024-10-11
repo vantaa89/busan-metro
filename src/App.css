@@ -2,7 +2,7 @@
   height: 100vh; /* Ensure the app takes full viewport height */
 }
 
-.App > div {
+.App > div.map {
   height: 100%;  /* The map div takes full height of the parent container */
   width: 100%;   /* Also ensure it takes full width */
 }

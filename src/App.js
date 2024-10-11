@@ -8,15 +8,43 @@ import { OSM } from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { defaults } from 'ol/control/defaults';
+import { Point } from 'ol/geom';
+import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
+import Feature from 'ol/Feature';
 
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function App() {
   const mapRef = useRef(null);
+  const [stations, setStations] = useState([])
+  const [vectorSource, setVectorSource] = useState(new VectorSource());
+
+  const loadData = function(){
+    fetch( './data/line1.csv' )
+        .then( response => response.text() )
+        .then( responseText => {
+          let parsedText = responseText.split("\n").map(e => e.split(","));
+          setStations(stations.concat(parsedText.map(e => ({ name: e[2], lon: e[3], lat: e[4], line: e[1] }))));
+        })
+  };
+
   useEffect(() => {
+    loadData();
     const tilelayer = new TileLayer({
       source: new OSM({ attributions: '' })
-    })
+    });
+
+
+    const vectorlayer = new VectorLayer({
+      source: vectorSource,
+      style: new Style({
+        image: new CircleStyle({
+          radius: 3,
+          fill: new Fill({ color: [240, 106, 0] }),
+        }),
+      }),
+    });
+
     const view = new View({
       center: fromLonLat([129.059556, 35.158282]), // 서면역
       zoom: 12
@@ -25,15 +53,31 @@ function App() {
     const map = new OlMap({
       controls: defaults({ zoom: false, rotate: false, attribution: false }),
       layers: [
-          tilelayer
+          tilelayer,
+          vectorlayer
       ],
       view: view,
     });
     map.setTarget(mapRef.current || '');
   }, []);
+
+  useEffect(() => {
+    stations.map(station => {
+      const pointFeature = new Feature({
+        geometry: new Point(fromLonLat([station.lon, station.lat])), 
+      });
+      console.log(`Added ${station.name}, ${station.lon}, ${station.lat}`);
+      let newVectorSource = vectorSource;
+      newVectorSource.addFeature(pointFeature);
+      setVectorSource(newVectorSource);
+    });
+  }, [stations])
   return (
     <div className="App">
-      <div ref={mapRef} />
+      {/* <div>{stations.map(station => {
+        return <p>{station.name}, {station.lat}, {station.lon}</p>
+      })}</div> */}
+      <div class="map" ref={mapRef} />
     </div>
   );
 }
