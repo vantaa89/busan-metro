@@ -142,7 +142,6 @@ function App() {
         </div>
       </div>
     </div>
-    console.log(answer)
     </>
   );
 }

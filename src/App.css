@@ -1,5 +1,6 @@
 .App {
   height: 100vh; /* Ensure the app takes full viewport height */
+  overflow: hidden;
 }
 
 .App > div.map {
@@ -17,8 +18,8 @@
   top: 30%;
   left: 50%;
   margin-left: -250px;
-  /* justify-content: space-between; */
 }
+
 
 input {
   width: 90%; 
