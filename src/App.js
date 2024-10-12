@@ -16,7 +16,6 @@ import { useState, useEffect, useRef } from 'react';
 
 function App() {
   const mapRef = useRef(null);
-<<<<<<< HEAD
   const [stations, setStations] = useState([])
   const [vectorSource1, setVectorSource1] = useState(new VectorSource());
   const [vectorSource2, setVectorSource2] = useState(new VectorSource());
@@ -25,10 +24,6 @@ function App() {
   const [vectorSourceD, setVectorSourceD] = useState(new VectorSource());
   const [vectorSourceG, setVectorSourceG] = useState(new VectorSource());
   const [answer, setAnswer] = useState("");
-=======
-  const [stations, setStations] = useState([]) // 역의 목록. [{name: "서면역", lon: 127, lon: 34, line: "1호선"}, ... ] 과 같은 dictionary의 list
-  const [vectorSource, setVectorSource] = useState(new VectorSource()); // 역을 지도에 그리는 layer
->>>>>>> 4c035ea6ba3821f800cc639e30ba22f27e4bd565
 
   const loadData = function(){
     fetch( './data/stations.csv' )
@@ -53,7 +48,7 @@ function App() {
           radius: 3,
           fill: new Fill({ color: 'white' }),
           stroke: new Stroke({
-            color: [240, 106, 0], // 부산 1호선 고유색. 다른 호선 추가시 수정 필요
+            color: [240, 106, 0], 
             width: 2,
           }),
         }),
@@ -152,12 +147,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    let newVectorSource = vectorSource;
-
-    stations.map(station => { // stations에 들어있는 각 dictionary(station)에 대해 이 함수를 적용
+    stations.map(station => {
       const pointFeature = new Feature({
         geometry: new Point(fromLonLat([station.lon, station.lat])), 
-<<<<<<< HEAD
       });
       /*console.log(`Added ${station.name}, ${station.lon}, ${station.lat}`);*/
       
@@ -191,14 +183,7 @@ function App() {
         newVectorSource.addFeature(pointFeature);
         setVectorSourceG(newVectorSource);
       }
-=======
-      })
-      console.log(`Added ${station.name}, ${station.lon}, ${station.lat}`);
-      newVectorSource.addFeature(pointFeature); // 해당 point를 지도에 표시되는 layer에 추가
->>>>>>> 4c035ea6ba3821f800cc639e30ba22f27e4bd565
     });
-
-    setVectorSource(newVectorSource);
   }, [stations])
 
   return (
