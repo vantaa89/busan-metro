@@ -20,7 +20,7 @@ function App() {
   const [combinedSource, setCombinedSource] = useState(new VectorSource());
   const [answer, setAnswer] = useState("");
 
-  const lineColor = {"1호선": [240, 106, 0], "2호선": [34, 139, 34], "3호선": [184, 134, 11], "4호선": [30, 144, 255], "동해": [153, 50, 204], "부산김해경전철": [153, 50, 204]};
+  const lineColor = {"1호선": [240, 106, 0], "2호선": [34, 139, 34], "3호선": [184, 134, 11], "4호선": [30, 144, 255], "동해": [0, 84, 166], "부산김해경전철": [153, 50, 204]};
 
   const buttonPushed = () => {
     console.log(answer);
