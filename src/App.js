@@ -16,6 +16,7 @@ import { useState, useEffect, useRef } from 'react';
 
 function App() {
   const mapRef = useRef(null);
+  const inputRef = useRef(null) 
   const [stations, setStations] = useState([])
   const [vectorSource1, setVectorSource1] = useState(new VectorSource());
   const [vectorSource2, setVectorSource2] = useState(new VectorSource());
@@ -24,6 +25,17 @@ function App() {
   const [vectorSourceD, setVectorSourceD] = useState(new VectorSource());
   const [vectorSourceG, setVectorSourceG] = useState(new VectorSource());
   const [answer, setAnswer] = useState("");
+
+  const activeButton = () => {
+    console.log(answer);
+    inputRef.current.value = null 
+  }
+
+  const activeEnter = (e) => {
+    if(e.key === "Enter") {
+      activeButton();
+    }
+  }
 
   const loadData = function(){
     fetch( './data/stations.csv' )
@@ -184,7 +196,7 @@ function App() {
         setVectorSourceG(newVectorSource);
       }
     });
-  }, [stations])
+;  }, [stations])
 
   return (
     <><div className="App">
@@ -193,11 +205,12 @@ function App() {
     })}</div> */}
       <div className="map" ref={mapRef}>
         <div className = "inputbox">
-          <input></input>
-          <button></button>
+          <input onChange={(e) => setAnswer(e.target.value)} onKeyDown={(e) => activeEnter(e)} ref={inputRef}/>
+          <button onClick={activeButton}>enter</button>
         </div>
       </div>
     </div>
+    console.log(answer)
     </>
   );
 }
