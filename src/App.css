@@ -5,4 +5,30 @@
 .App > div.map {
   height: 100%;  /* The map div takes full height of the parent container */
   width: 100%;   /* Also ensure it takes full width */
+  z-index: 1;
+}
+
+.inputbox {
+  display: flex;
+  position: absolute;
+  z-index: 2;
+  width: 500px;
+  height: 40px;
+  top: 30%;
+  left: 50%;
+  margin-left: -250px;
+  justify-content: space-between;
+}
+
+input {
+  width: 90%; 
+  font-size: 20px;
+  border: 0;
+  border-radius: 10px;
+  opacity: 0.7;
+}
+
+button {
+  width: 40px;
+  border-radius: 10px;
 }
