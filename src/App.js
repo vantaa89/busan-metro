@@ -47,7 +47,6 @@ function App() {
       const pointFeature = new Feature({
         geometry: new Point(fromLonLat([station.lon, station.lat])), 
       });
-      // console.log(`Added ${station.name}, ${station.lon}, ${station.lat}`);
       pointFeature.setStyle(
         new Style({
           image: new CircleStyle({
