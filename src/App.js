@@ -18,9 +18,34 @@ function App() {
   const mapRef = useRef(null);
   const [stations, setStations] = useState([])
   const [vectorSource, setVectorSource] = useState(new VectorSource());
+  const [answer, setAnswer] = useState("")
 
   const loadData = function(){
     fetch( './data/line1.csv' )
+        .then( response => response.text() )
+        .then( responseText => {
+          let parsedText = responseText.split("\n").map(e => e.split(","));
+          setStations(stations.concat(parsedText.map(e => ({ name: e[2], lon: e[3], lat: e[4], line: e[1] }))));
+        })
+    fetch( './data/line2.csv' )
+        .then( response => response.text() )
+        .then( responseText => {
+          let parsedText = responseText.split("\n").map(e => e.split(","));
+          setStations(stations.concat(parsedText.map(e => ({ name: e[2], lon: e[3], lat: e[4], line: e[1] }))));
+        })
+    fetch( './data/line3.csv' )
+        .then( response => response.text() )
+        .then( responseText => {
+          let parsedText = responseText.split("\n").map(e => e.split(","));
+          setStations(stations.concat(parsedText.map(e => ({ name: e[2], lon: e[3], lat: e[4], line: e[1] }))));
+        })
+    fetch( './data/line4.csv' )
+        .then( response => response.text() )
+        .then( responseText => {
+          let parsedText = responseText.split("\n").map(e => e.split(","));
+          setStations(stations.concat(parsedText.map(e => ({ name: e[2], lon: e[3], lat: e[4], line: e[1] }))));
+        })
+    fetch( './data/lineD.csv' )
         .then( response => response.text() )
         .then( responseText => {
           let parsedText = responseText.split("\n").map(e => e.split(","));
@@ -77,12 +102,18 @@ function App() {
     });
   }, [stations])
   return (
-    <div className="App">
+    <><div className="App">
       {/* <div>{stations.map(station => {
-        return <p>{station.name}, {station.lat}, {station.lon}</p>
-      })}</div> */}
+      return <p>{station.name}, {station.lat}, {station.lon}</p>
+    })}</div> */}
       <div class="map" ref={mapRef} />
     </div>
+    <div>
+    <input 
+      value = {answer}
+      onChange={(e)=>{setAnswer(e.target.value)}}
+      /> 
+    </div></>
   );
 }
 
