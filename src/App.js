@@ -26,14 +26,14 @@ function App() {
   const [vectorSourceG, setVectorSourceG] = useState(new VectorSource());
   const [answer, setAnswer] = useState("");
 
-  const activeButton = () => {
+  const buttonPushed = () => {
     console.log(answer);
     inputRef.current.value = null 
   }
 
-  const activeEnter = (e) => {
+  const keyboardEnter = (e) => {
     if(e.key === "Enter") {
-      activeButton();
+      buttonPushed();
     }
   }
 
@@ -205,8 +205,8 @@ function App() {
     })}</div> */}
       <div className="map" ref={mapRef}>
         <div className = "inputbox">
-          <input onChange={(e) => setAnswer(e.target.value)} onKeyDown={(e) => activeEnter(e)} ref={inputRef}/>
-          <button onClick={activeButton}>enter</button>
+          <input onChange={(e) => setAnswer(e.target.value)} onKeyDown={(e) => keyboardEnter(e)} ref={inputRef}/>
+          <button onClick={buttonPushed}>enter</button>
         </div>
       </div>
     </div>
