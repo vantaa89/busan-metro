@@ -41,19 +41,18 @@ function App() {
     console.log("already found");
   }
 
-  const wrongAnswer =() => {
-    console.log("wrong answer");
-  }
-
   const showLabel = (station) => {
+    console.log(station);
     combinedSource.forEachFeature((feature) => {
-      if (feature.get('name') === station.name) {
+      if (feature.get('name') === station.name && feature.get('line') === station.line) {
+        const color = lineInfo.filter(line=> (line.name === station.line))[0].color;
+        console.log(color)
         const newStyle = new Style({
           image: new CircleStyle({
             radius: 3.5,
-            fill: new Fill({ color: lineInfo.filter(line => (line.name==station.line))[0].color }),
+            fill: new Fill({ color}),
             stroke: new Stroke({
-              color: lineInfo.filter(line => (line.name==station.line))[0].color,
+              color: color, 
               width: 2,
             }),
           }),
@@ -78,14 +77,11 @@ function App() {
     for(const station of stations){
       if (station.name === answer && station.found === false){
         correctAnswer(station);
-        return;
       }
       else if (station.name === answer && station.found === true){
         alreadyFound(station)
-        return;
       }
     }
-    wrongAnswer()
   }
 
   const keyboardEnter = (e) => {
@@ -112,6 +108,7 @@ function App() {
       const pointFeature = new Feature({
         geometry: new Point(fromLonLat([station.lon, station.lat])), 
         name: station.name,
+        line: station.line,
       });
       let color;
       try{
