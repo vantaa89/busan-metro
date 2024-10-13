@@ -187,7 +187,8 @@ function App() {
       ],
       view: new View({
         center: fromLonLat([129.059556, 35.158282]), // 서면역
-        zoom: 12
+        zoom: 12,
+        maxZoom: 13,
       }),
     });
     map.setTarget(mapRef.current || '');
