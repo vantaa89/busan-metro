@@ -9,7 +9,8 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { defaults } from 'ol/control/defaults';
 import { LineString, Point } from 'ol/geom';
-import { Style, Circle as CircleStyle, Fill, Stroke} from 'ol/style';
+import { Style, Circle as CircleStyle, Fill, Stroke, } from 'ol/style';
+import { Text } from 'ol/style';
 import { Feature } from 'ol';
 import { useState, useEffect, useRef } from 'react';
 import { parse } from 'ol/expr/expression';
@@ -30,9 +31,60 @@ function App() {
     {name: "부산김해경전철", code: "bgl", color: [153, 50, 204]},
   ];
 
+  const correctAnswer = (station) => {
+    station.found = true;
+    showLabel(station);
+  }
+
+  const alreadyFound = (station) => {
+    console.log("already found");
+  }
+
+  const wrongAnswer =() => {
+    console.log("wrong answer");
+  }
+
+  const showLabel = (station) => {
+    combinedSource.forEachFeature((feature) => {
+      if (feature.get('name') === station.name) {
+        const newStyle = new Style({
+          image: new CircleStyle({
+            radius: 3,
+            fill: new Fill({ color: 'white' }),
+            stroke: new Stroke({
+              color: lineInfo.filter(line => (line.name==station.line))[0].color,
+              width: 2,
+            }),
+          }),
+          text: new Text({
+            font: '12px Calibri,sans-serif',
+            fill: new Fill({ color: 'black' }),
+            stroke: new Stroke({
+              color: 'white',
+              width: 2,
+            }),
+            offsetY: -15,
+            text: station.name,
+          })
+        })
+        feature.setStyle(newStyle);
+      }
+    })
+  }
+
   const buttonPushed = () => {
-    console.log(answer);
     inputRef.current.value = null 
+    for(const station of stations){
+      if (station.name === answer && station.found === false){
+        correctAnswer(station);
+        return;
+      }
+      else if (station.name === answer && station.found === true){
+        alreadyFound(station)
+        return;
+      }
+    }
+    wrongAnswer()
   }
 
   const keyboardEnter = (e) => {
@@ -48,7 +100,7 @@ function App() {
         .then( response => response.text() )
         .then( responseText => {
           let parsedText = responseText.split("\n").map(e => e.split(","));
-          newStations = newStations.concat(parsedText.map(e => ({ name: e[2], lon: parseFloat(e[3]), lat: parseFloat(e[4]), line: e[1] })));
+          newStations = newStations.concat(parsedText.map(e => ({ name: e[2], lon: parseFloat(e[3]), lat: parseFloat(e[4]), line: e[1], found: false })));
           setStations(newStations);
         });
     }          
@@ -58,6 +110,7 @@ function App() {
     stations.map(station => {
       const pointFeature = new Feature({
         geometry: new Point(fromLonLat([station.lon, station.lat])), 
+        name: station.name,
       });
       let color;
       try{
@@ -75,6 +128,16 @@ function App() {
               width: 2,
             }),
           }),
+          text: new Text({
+            font: '12px Calibri,sans-serif',
+            fill: new Fill({ color: 'rgba(0, 0, 0, 0)' }),
+            stroke: new Stroke({
+              color: 'rgba(0, 0, 0, 0)',
+              width: 2,
+            }),
+            offsetY: -15,
+            text: station.name,
+          })
         })
       );
       combinedSource.addFeature(pointFeature);
