@@ -101,7 +101,7 @@ function App() {
         .then( response => response.text() )
         .then( responseText => {
           let parsedText = responseText.split("\n").map(e => e.split(","));
-          newStations = newStations.concat(parsedText.map(e => ({ name: e[2], lon: parseFloat(e[3]), lat: parseFloat(e[4]), line: e[1], found: false })));
+          newStations = newStations.concat(parsedText.map(e => ({ name: e[2].split('(')[0], lon: parseFloat(e[3]), lat: parseFloat(e[4]), line: e[1], found: false })));
           setStations(newStations);
         });
     }          
