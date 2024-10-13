@@ -173,6 +173,7 @@ function App() {
     const tilelayer = new TileLayer({
       source: new OSM({ attributions: '' })
     });
+    tilelayer.setOpacity(0.7);
 
     const vectorLayer = new VectorLayer({
       source: combinedSource,
