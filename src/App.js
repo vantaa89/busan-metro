@@ -3,8 +3,9 @@ import './App.css';
 import "ol";
 import { Map as OlMap, View } from 'ol';
 import { fromLonLat } from 'ol/proj';
+import Tile from 'ol/layer';
 import TileLayer from 'ol/layer/Tile';
-import { OSM } from 'ol/source';
+import { OSM, XYZ } from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { defaults } from 'ol/control/defaults';
@@ -168,9 +169,12 @@ function App() {
   useEffect(() => {
 
     const tilelayer = new TileLayer({
-      source: new OSM({ attributions: '' })
+        source: new XYZ({
+            url: 'https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            maxZoom: 13
+        }),
+        opacity: 1
     });
-    tilelayer.setOpacity(0.7);
 
     const vectorLayer = new VectorLayer({
       source: combinedSource,
