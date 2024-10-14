@@ -106,7 +106,7 @@ function App() {
       return;
     }
     if(stationsSameName[0].found){      // already found
-      NotificationManager.info(`${answer}역은 이미 찾은 역입니다`);
+      NotificationManager.info(`${stationsSameName[0].name}역은 이미 찾은 역입니다`);
       return;
     }
     // correct answer
