@@ -117,7 +117,7 @@ function App() {
 
 
     const updatedStations = stations.map(station => {
-      return {...station, found: compareStationName(station.name, answer)};
+      return {...station, found: station.found || compareStationName(station.name, answer)};
     });
     setStations(updatedStations);
   }
