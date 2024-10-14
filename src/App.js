@@ -46,7 +46,6 @@ function App() {
   const inputRef = useRef(null) 
   const [stations, setStations] = useState([])
   const [combinedSource, setCombinedSource] = useState(new VectorSource());
-  const [answer, setAnswer] = useState("");
   
   const lineInfo = [
     {name: "1호선", code: "line1", color: [240, 106, 0]},
@@ -57,21 +56,7 @@ function App() {
     {name: "부산김해경전철", code: "bgl", color: [153, 50, 204]},
   ];
 
-  const correctAnswer = (station) => {
-    const stationsSameName = stations.filter(st => st.name === station.name);
-    const lines = stationsSameName.map(st => st.line).sort().join(", ");
-    NotificationManager.success(lines, station.name.concat("역"));
-    for(const s of stationsSameName)
-      showLabel(s);
-  }
 
-  const alreadyFound = (station) => {
-    NotificationManager.info(`${station.name}역은 이미 찾은 역입니다`);
-  }
-
-  const wrongAnswer = () => {
-    NotificationManager.warning('그런 역은 없답니다?', '오답', 3000);
-  }
 
   const showLabel = (station) => {
     console.log(station);
@@ -111,31 +96,29 @@ function App() {
     if(reference_dropped === query_dropped.slice(0, query_dropped.length - 1)) return true;
     return false;
   }
-  
+
   const buttonPushed = () => {
+    const answer = inputRef.current.value;
     inputRef.current.value = null;
-    let firstMatch = true;
-    const updatedStations = stations.map(station => {
-      if (compareStationName(station.name, answer)) {
-        if (!station.found) {
-          if(firstMatch){
-            correctAnswer(station);
-            firstMatch = false;
-          }
-          return { ...station, found: true }; // 새로운 객체를 반환
-        } else {
-          alreadyFound(station);
-          return station;
-        }
-      }
-      return station;
-    });
-  
-    // 상태를 업데이트하여 StatusWindow가 즉시 갱신되도록 합니다.
-    const isCorrect = stations.some(station => compareStationName(station.name, answer) && !station.found);
-    if (!isCorrect) {
-      wrongAnswer(answer);
+    const stationsSameName = stations.filter(st => compareStationName(st.name, answer)); 
+    if(stationsSameName.length === 0){  // wrong station name
+      NotificationManager.warning('그런 역은 없답니다?', '오답');
+      return;
     }
+    if(stationsSameName[0].found){      // already found
+      NotificationManager.info(`${answer}역은 이미 찾은 역입니다`);
+      return;
+    }
+    // correct answer
+    const lines = stationsSameName.map(st => st.line).sort().join(", ");
+    NotificationManager.success(lines, stationsSameName[0].name.concat("역"));
+    for(const s of stationsSameName)
+      showLabel(s);
+
+
+    const updatedStations = stations.map(station => {
+      return {...station, found: compareStationName(station.name, answer)};
+    });
     setStations(updatedStations);
   }
 
@@ -258,7 +241,7 @@ function App() {
     <><div className="App">
       <div className="map" ref={mapRef}>
         <div id = "inputBox">
-          <input id = "inputWindow" onChange={(e) => setAnswer(e.target.value)} onKeyDown={(e) => keyboardEnter(e)} ref={inputRef}/>
+          <input id = "inputWindow" onKeyDown={(e) => keyboardEnter(e)} ref={inputRef}/>
           <button id = "enter" onClick={buttonPushed}>enter</button>
         </div>
         <div id = "result"></div>
