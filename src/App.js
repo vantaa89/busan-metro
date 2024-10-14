@@ -36,10 +36,42 @@ function App() {
   const correctAnswer = (station) => {
     station.found = true;
     showLabel(station);
+    console.log("wrong answer");
+    const resultDiv = document.getElementById("result");
+    const inputWindow = document.getElementById("inputWindow");
+    resultDiv.innerHTML = "참 잘했어요"
+    resultDiv.style.color = "green";
+    inputWindow.style.backgroundColor = "rgb(200, 255, 200)";
+    setTimeout(() => {
+      resultDiv.innerHTML = "";
+      inputWindow.style.backgroundColor = "white";
+    }, 1500);
   }
 
   const alreadyFound = (station) => {
     console.log("already found");
+    const resultDiv = document.getElementById("result");
+    const inputWindow = document.getElementById("inputWindow");
+    resultDiv.innerHTML = "이미 찾은 역입니다"
+    resultDiv.style.color = "blue";
+    inputWindow.style.backgroundColor = "rgb(200, 200, 255)";
+    setTimeout(() => {
+      resultDiv.innerHTML = "";
+      inputWindow.style.backgroundColor = "white";
+    }, 1500);
+  }
+
+  const wrongAnswer = () => {
+    console.log("wrong answer");
+    const resultDiv = document.getElementById("result");
+    const inputWindow = document.getElementById("inputWindow");
+    resultDiv.innerHTML = "그런역은 없어요"
+    resultDiv.style.color = "red";
+    inputWindow.style.backgroundColor = "rgb(255, 200, 200)";
+    setTimeout(() => {
+      resultDiv.innerHTML = "";
+      inputWindow.style.backgroundColor = "white";
+    }, 1500);
   }
 
   const showLabel = (station) => {
@@ -78,11 +110,15 @@ function App() {
     for(const station of stations){
       if (station.name === answer && station.found === false){
         correctAnswer(station);
+        return;
       }
       else if (station.name === answer && station.found === true){
         alreadyFound(station)
+        return;
       }
     }
+    wrongAnswer(answer);
+    return;
   }
 
   const keyboardEnter = (e) => {
@@ -188,7 +224,7 @@ function App() {
       view: new View({
         center: fromLonLat([129.059556, 35.158282]), // 서면역
         zoom: 12,
-        maxZoom: 13,
+        maxZoom: 15,
       }),
     });
     map.setTarget(mapRef.current || '');
@@ -215,10 +251,11 @@ function App() {
   return (
     <><div className="App">
       <div className="map" ref={mapRef}>
-        <div className = "inputbox">
-          <input onChange={(e) => setAnswer(e.target.value)} onKeyDown={(e) => keyboardEnter(e)} ref={inputRef}/>
+        <div id = "inputBox">
+          <input id = "inputWindow" onChange={(e) => setAnswer(e.target.value)} onKeyDown={(e) => keyboardEnter(e)} ref={inputRef}/>
           <button id = "enter" onClick={buttonPushed}>enter</button>
         </div>
+        <div id = "result"></div>
         <button id = "modalOpen" onClick={() => setOpenModal(true)}>
           ㅅ
         </button>

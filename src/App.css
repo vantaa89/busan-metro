@@ -9,7 +9,7 @@
   z-index: 1;
 }
 
-.inputbox {
+#inputBox {
   display: flex;
   position: absolute;
   z-index: 2;
@@ -22,7 +22,7 @@
   border-radius: 10px;
 }
 
-input {
+#inputWindow {
   width: 100%; 
   font-size: 20px;
   border: 0;
@@ -37,6 +37,20 @@ input {
   background-color: #CCC;
   color: black;
   border: none;
+}
+
+#result {
+  display: flex;
+  position: absolute;
+  z-index: 2;
+  width: 500px;
+  height: 40px;
+  top: 29.5%;
+  left: 50%;
+  margin-left: -240px;
+  color: red;
+  font-style: italic;
+  font-size: 12px;
 }
 
 #modalOpen {
@@ -88,3 +102,4 @@ input {
   justify-content: center;
   align-items: center;
 }
+
