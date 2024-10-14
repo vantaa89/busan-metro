@@ -116,9 +116,8 @@ function App() {
     const updatedStations = stations.map(station => {
       if (compareStationName(station.name, answer)) {
         if (!station.found) {
-          // 발견된 역을 표시하고 station.found를 true로 변경합니다.
           correctAnswer(station);
-          return { ...station, found: true }; // 새로운 객체를 반환
+          return { ...station, found: true }; c
         } else {
           alreadyFound(station);
           return station;
@@ -127,7 +126,6 @@ function App() {
       return station;
     });
   
-    // 상태를 업데이트하여 StatusWindow가 즉시 갱신되도록 합니다.
     const isCorrect = stations.some(station => compareStationName(station.name, answer) && !station.found);
     if (!isCorrect) {
       wrongAnswer(answer);
