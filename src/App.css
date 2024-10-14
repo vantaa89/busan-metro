@@ -1,12 +1,14 @@
 .App {
   height: 100vh; /* Ensure the app takes full viewport height */
   overflow: hidden;
+  position: relative;
 }
 
 .App > div.map {
   height: 100%;  /* The map div takes full height of the parent container */
   width: 100%;   /* Also ensure it takes full width */
   z-index: 1;
+  position: relative;
 }
 
 #inputBox {
@@ -53,53 +55,21 @@
   font-size: 12px;
 }
 
-#modalOpen {
-  display: flex;
+.statusBox{
   position: absolute;
-  z-index: 2;
-  top: 50%;
-  transform: translate(0, -50%);
-  right: 0%;
-  width: 20px;
-  height: 100px;
-  border-radius: 20px 0 0 20px;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-  color: black;
-  border: none;
-}
-
-.modal {
   display: flex;
-  position: absolute;
-  z-index: 2;
-  top: 50%;
-  transform: translate(0, -50%);
-  right: 0;
-  width: 30%;
   height: 100%;
-  background: rgb(255, 255, 255);
-  justify-content: center;
-  align-items: center;
-}
- 
- 
-#closeModal {
-  display: flex;
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
-  left: 0%;
-  width: 20px;
-  height: 100px;
-  border-radius: 0 20px 20px 0;
-  background-color: #8c8c8c;
-  color: black;
-  border: none;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
+  width: 25%;
+  right: 0;
+  z-index: 2;
+  background-color: white;
+  opacity: 0.8;
 }
 
+.myProgress{
+  height: 40%;
+  width: 80%;
+  top: 10%;
+  z-index: 3;
+  background-color: pink;
+}
