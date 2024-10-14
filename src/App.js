@@ -58,8 +58,8 @@ function App() {
       showLabel(s);
   }
 
-  const alreadyFound = (stationName) => {
-    NotificationManager.info(`${stationName}역은 이미 찾은 역입니다`);
+  const alreadyFound = (station) => {
+    NotificationManager.info(`${station.name}역은 이미 찾은 역입니다`);
   }
 
   const wrongAnswer = () => {
