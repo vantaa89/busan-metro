@@ -18,11 +18,23 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 function StatusWindow({stations}){
+  const lineCounts = {"1호선": 0, "2호선": 0, "3호선": 0, "4호선": 0, "동해선": 0, "부산김해경전철": 0};
+  const totalStations = {"1호선": 40, "2호선": 43, "3호선": 17, "4호선": 14, "동해선": 23, "부산김해경전철": 21};
 
+  stations.forEach(station => {
+    if (station.found){
+      lineCounts[station.line] += 1;
+    }
+  })
   return(
     <div className = "statusBox">
       <div className = "myProgress">
-        잘 하는중
+        <h3>발견된 역 현황</h3>
+        {Object.entries(lineCounts).map(([line, count]) => (
+          <div key = {line}>
+            {line}: {count} / {totalStations[line]} {(count/totalStations[line]*100).toFixed(2)}% 
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -45,11 +57,6 @@ function App() {
     {name: "부산김해경전철", code: "bgl", color: [153, 50, 204]},
   ];
 
-  const resultMessageInfo = [
-    {msg: "참 잘했어요", textColor: "green", backgroundColor: "rgb(200, 255, 200)"},
-    {msg: "이미 찾은 역입니다", textColor: "blue", backgroundColor: "rgb(200, 200, 255)"},
-    {msg: "그런역은 없답니다?", textColor: "red", backgroundColor: "rgb(255, 200, 200)"},
-  ]
   const correctAnswer = (station) => {
     const stationsSameName = stations.filter(st => st.name === station.name);
     const lines = stationsSameName.map(st => st.line).join(", ");
@@ -64,18 +71,6 @@ function App() {
 
   const wrongAnswer = () => {
     NotificationManager.warning('그런 역은 없답니다?', '오답', 3000);
-  }
-
-  const showResult = (i) => {
-    const resultDiv = document.getElementById("result");
-    const inputWindow = document.getElementById("inputWindow");
-    resultDiv.innerHTML = resultMessageInfo[i].msg;
-    resultDiv.style.color = resultMessageInfo[i].textColor;
-    inputWindow.style.backgroundColor = resultMessageInfo[i].backgroundColor;
-    setTimeout(() => {
-      resultDiv.innerHTML = "";
-      inputWindow.style.backgroundColor = "white";
-    }, 1500);
   }
 
   const showLabel = (station) => {
@@ -111,19 +106,26 @@ function App() {
 
   const buttonPushed = () => {
     inputRef.current.value = null 
-    for(const station of stations){
-      if (station.name === answer && station.found === false){
-        station.found = true;
-        correctAnswer(station);
-        return;
+    const updatedStations = stations.map(station => {
+      if (station.name === answer) {
+        if (!station.found) {
+          // 발견된 역을 표시하고 station.found를 true로 변경합니다.
+          correctAnswer(station);
+          return { ...station, found: true }; // 새로운 객체를 반환
+        } else {
+          alreadyFound(station);
+          return station;
+        }
       }
-      else if (station.name === answer && station.found === true){
-        alreadyFound(station)
-        return;
-      }
+      return station;
+    });
+  
+    // 상태를 업데이트하여 StatusWindow가 즉시 갱신되도록 합니다.
+    const isCorrect = stations.some(station => station.name === answer && !station.found);
+    if (!isCorrect) {
+      wrongAnswer(answer);
     }
-    wrongAnswer(answer);
-    return;
+    setStations(updatedStations);
   }
 
   const keyboardEnter = (e) => {
