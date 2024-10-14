@@ -112,12 +112,18 @@ function App() {
   }
   
   const buttonPushed = () => {
-    inputRef.current.value = null 
+    inputRef.current.value = null;
+    let firstMatch = true;
     const updatedStations = stations.map(station => {
       if (compareStationName(station.name, answer)) {
         if (!station.found) {
           correctAnswer(station);
           return { ...station, found: true }; c
+          if(firstMatch){
+            correctAnswer(station);
+            firstMatch = false;
+          }
+          return { ...station, found: true }; // 새로운 객체를 반환
         } else {
           alreadyFound(station);
           return station;
