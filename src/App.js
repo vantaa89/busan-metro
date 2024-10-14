@@ -109,15 +109,22 @@ function App() {
     })
   }
 
+  const compareStationName = (reference, query) => {
+    const reference_dropped = reference.replace(/[^\uAC00-\uD7A3]/g, '');
+    const query_dropped = query.replace(/[^\uAC00-\uD7A3]/g, '');
+    if(reference_dropped === query_dropped) return true;
+    return false;
+  }
+  
   const buttonPushed = () => {
     inputRef.current.value = null 
     for(const station of stations){
-      if (station.name === answer && station.found === false){
-        station.found = true;
-        correctAnswer(station);
-        return;
-      }
-      else if (station.name === answer && station.found === true){
+      if (compareStationName(station.name, answer)){
+        if(!station.found){ 
+          station.found = true;
+          correctAnswer(station);
+          return;
+        }
         alreadyFound(station)
         return;
       }
