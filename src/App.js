@@ -104,10 +104,17 @@ function App() {
     })
   }
 
+  const compareStationName = (reference, query) => {
+    const reference_dropped = reference.replace(/[^\uAC00-\uD7A3]/g, '');
+    const query_dropped = query.replace(/[^\uAC00-\uD7A3]/g, '');
+    if(reference_dropped === query_dropped) return true;
+    return false;
+  }
+  
   const buttonPushed = () => {
     inputRef.current.value = null 
     const updatedStations = stations.map(station => {
-      if (station.name === answer) {
+      if (compareStationName(station.name, answer)) {
         if (!station.found) {
           // 발견된 역을 표시하고 station.found를 true로 변경합니다.
           correctAnswer(station);
@@ -121,7 +128,7 @@ function App() {
     });
   
     // 상태를 업데이트하여 StatusWindow가 즉시 갱신되도록 합니다.
-    const isCorrect = stations.some(station => station.name === answer && !station.found);
+    const isCorrect = stations.some(station => compareStationName(station.name, answer) && !station.found);
     if (!isCorrect) {
       wrongAnswer(answer);
     }
