@@ -47,7 +47,6 @@ function App() {
   const [stations, setStations] = useState([]);
   const [combinedSource, setCombinedSource] = useState(new VectorSource());
   const [answer, setAnswer] = useState("");
-  const [correctCount, setCorrectCount] = useState([]);
   
   const lineInfo = [
     {name: "1호선", code: "line1", color: [240, 106, 0]},
@@ -60,7 +59,7 @@ function App() {
 
   const correctAnswer = (station) => {
     const stationsSameName = stations.filter(st => st.name === station.name);
-    const lines = stationsSameName.map(st => st.line).join(", ");
+    const lines = stationsSameName.map(st => st.line).sort().join(", ");
     NotificationManager.success(lines, station.name.concat("역"));
     for(const s of stationsSameName)
       showLabel(s);
@@ -109,17 +108,33 @@ function App() {
     const reference_dropped = reference.replace(/[^\uAC00-\uD7A3]/g, '');
     const query_dropped = query.replace(/[^\uAC00-\uD7A3]/g, '');
     if(reference_dropped === query_dropped) return true;
+    if(query_dropped[query_dropped.length-1] === '역' 
+      && reference_dropped === query_dropped.slice(0, query_dropped.length - 1)) return true;
     return false;
   }
-  
+
   const buttonPushed = () => {
+    const answer = inputRef.current.value;
     inputRef.current.value = null;
-    let firstMatch = true;
+    const stationsSameName = stations.filter(st => compareStationName(st.name, answer)); 
+    if(stationsSameName.length === 0){  // wrong station name
+      NotificationManager.warning('그런 역은 없답니다?', '오답');
+      return;
+    }
+    if(stationsSameName[0].found){      // already found
+      NotificationManager.info(`${stationsSameName[0].name}역은 이미 찾은 역입니다`);
+      return;
+    }
+    // correct answer
+    const lines = stationsSameName.map(st => st.line).sort().join(", ");
+    NotificationManager.success(lines, stationsSameName[0].name.concat("역"));
+    for(const s of stationsSameName)
+      showLabel(s);
+
+
     const updatedStations = stations.map(station => {
       if (compareStationName(station.name, answer)) {
         if (!station.found) {
-          correctAnswer(station);
-          return { ...station, found: true }; 
           if(firstMatch){
             correctAnswer(station);
             firstMatch = false;
@@ -133,6 +148,7 @@ function App() {
       return station;
     });
   
+    // 상태를 업데이트하여 StatusWindow가 즉시 갱신되도록 합니다.
     const isCorrect = stations.some(station => compareStationName(station.name, answer) && !station.found);
     if (!isCorrect) {
       wrongAnswer(answer);
@@ -259,7 +275,7 @@ function App() {
     <><div className="App">
       <div className="map" ref={mapRef}>
         <div id = "inputBox">
-          <input id = "inputWindow" onChange={(e) => setAnswer(e.target.value)} onKeyDown={(e) => keyboardEnter(e)} ref={inputRef}/>
+          <input id = "inputWindow" onKeyDown={(e) => keyboardEnter(e)} ref={inputRef}/>
           <button id = "enter" onClick={buttonPushed}>enter</button>
         </div>
         <div id = "result"></div>
