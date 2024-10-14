@@ -43,10 +43,11 @@ function StatusWindow({stations}){
 
 function App() {
   const mapRef = useRef(null);
-  const inputRef = useRef(null) 
-  const [stations, setStations] = useState([])
+  const inputRef = useRef(null);
+  const [stations, setStations] = useState([]);
   const [combinedSource, setCombinedSource] = useState(new VectorSource());
   const [answer, setAnswer] = useState("");
+  const [correctCount, setCorrectCount] = useState([]);
   
   const lineInfo = [
     {name: "1호선", code: "line1", color: [240, 106, 0]},
@@ -118,7 +119,7 @@ function App() {
       if (compareStationName(station.name, answer)) {
         if (!station.found) {
           correctAnswer(station);
-          return { ...station, found: true }; c
+          return { ...station, found: true }; 
           if(firstMatch){
             correctAnswer(station);
             firstMatch = false;
