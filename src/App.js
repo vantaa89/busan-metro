@@ -33,41 +33,34 @@ function App() {
     {name: "부산김해경전철", code: "bgl", color: [153, 50, 204]},
   ];
 
+  const resultMessageInfo = [
+    {msg: "참 잘했어요", textColor: "green", backgroundColor: "rgb(200, 255, 200)"},
+    {msg: "이미 찾은 역입니다", textColor: "blue", backgroundColor: "rgb(200, 200, 255)"},
+    {msg: "그런역은 없답니다?", textColor: "red", backgroundColor: "rgb(255, 200, 200)"},
+  ]
+
   const correctAnswer = (station) => {
     station.found = true;
     showLabel(station);
-    console.log("wrong answer");
-    const resultDiv = document.getElementById("result");
-    const inputWindow = document.getElementById("inputWindow");
-    resultDiv.innerHTML = "참 잘했어요"
-    resultDiv.style.color = "green";
-    inputWindow.style.backgroundColor = "rgb(200, 255, 200)";
-    setTimeout(() => {
-      resultDiv.innerHTML = "";
-      inputWindow.style.backgroundColor = "white";
-    }, 1500);
+    showResult(0);
   }
 
   const alreadyFound = (station) => {
     console.log("already found");
-    const resultDiv = document.getElementById("result");
-    const inputWindow = document.getElementById("inputWindow");
-    resultDiv.innerHTML = "이미 찾은 역입니다"
-    resultDiv.style.color = "blue";
-    inputWindow.style.backgroundColor = "rgb(200, 200, 255)";
-    setTimeout(() => {
-      resultDiv.innerHTML = "";
-      inputWindow.style.backgroundColor = "white";
-    }, 1500);
+    showResult(1);
   }
 
   const wrongAnswer = () => {
     console.log("wrong answer");
+    showResult(2);
+  }
+
+  const showResult = (i) => {
     const resultDiv = document.getElementById("result");
     const inputWindow = document.getElementById("inputWindow");
-    resultDiv.innerHTML = "그런역은 없어요"
-    resultDiv.style.color = "red";
-    inputWindow.style.backgroundColor = "rgb(255, 200, 200)";
+    resultDiv.innerHTML = resultMessageInfo[i].msg;
+    resultDiv.style.color = resultMessageInfo[i].textColor;
+    inputWindow.style.backgroundColor = resultMessageInfo[i].backgroundColor;
     setTimeout(() => {
       resultDiv.innerHTML = "";
       inputWindow.style.backgroundColor = "white";
