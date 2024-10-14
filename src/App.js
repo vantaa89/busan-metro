@@ -16,13 +16,24 @@ import { Feature } from 'ol';
 import { useState, useEffect, useRef } from 'react';
 import { parse } from 'ol/expr/expression';
 
+function StatusWindow({stations}){
+
+  return(
+    <div className = "statusBox">
+      <div className = "myProgress">
+        잘 하는중
+      </div>
+    </div>
+  )
+}
+
+
 function App() {
   const mapRef = useRef(null);
   const inputRef = useRef(null) 
   const [stations, setStations] = useState([])
   const [combinedSource, setCombinedSource] = useState(new VectorSource());
   const [answer, setAnswer] = useState("");
-  const [openModal, setOpenModal] = useState(true);
   
   const lineInfo = [
     {name: "1호선", code: "line1", color: [240, 106, 0]},
@@ -229,18 +240,6 @@ function App() {
     drawLines();
   }, [stations]);
 
-  const Modal = ({ isOpen, onClose, children }) => {
-    // 만약 isOpen이 false이면 null을 반환하여 모달을 렌더링하지 않음
-    if (!isOpen) return null;
-    
-    return (
-      <div onClick={(e) => e.stopPropagation()} className="modal">
-          {children}
-          <h1> 상태창 </h1>
-      </div>
-    );
-  };
-
   return (
     <><div className="App">
       <div className="map" ref={mapRef}>
@@ -249,19 +248,7 @@ function App() {
           <button id = "enter" onClick={buttonPushed}>enter</button>
         </div>
         <div id = "result"></div>
-        <button id = "modalOpen" onClick={() => setOpenModal(true)}>
-          ㅅ
-        </button>
-      
-        <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
-          {/* children */}
-          <div>
-            <button id = "closeModal" onClick={() => setOpenModal(false)}>
-              취소
-            </button>
-          </div>
-        </Modal>
-
+        <StatusWindow stations = {stations} />
       </div>
     </div>
     </>
