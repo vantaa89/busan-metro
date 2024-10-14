@@ -59,7 +59,7 @@ function App() {
 
   const correctAnswer = (station) => {
     const stationsSameName = stations.filter(st => st.name === station.name);
-    const lines = stationsSameName.map(st => st.line).join(", ");
+    const lines = stationsSameName.map(st => st.line).sort().join(", ");
     NotificationManager.success(lines, station.name.concat("역"));
     for(const s of stationsSameName)
       showLabel(s);
@@ -108,16 +108,20 @@ function App() {
     const reference_dropped = reference.replace(/[^\uAC00-\uD7A3]/g, '');
     const query_dropped = query.replace(/[^\uAC00-\uD7A3]/g, '');
     if(reference_dropped === query_dropped) return true;
+    if(reference_dropped === query_dropped.slice(0, query_dropped.length - 1)) return true;
     return false;
   }
   
   const buttonPushed = () => {
-    inputRef.current.value = null 
+    inputRef.current.value = null;
+    let firstMatch = true;
     const updatedStations = stations.map(station => {
       if (compareStationName(station.name, answer)) {
         if (!station.found) {
-          // 발견된 역을 표시하고 station.found를 true로 변경합니다.
-          correctAnswer(station);
+          if(firstMatch){
+            correctAnswer(station);
+            firstMatch = false;
+          }
           return { ...station, found: true }; // 새로운 객체를 반환
         } else {
           alreadyFound(station);
