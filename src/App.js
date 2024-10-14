@@ -17,23 +17,14 @@ import { useState, useEffect, useRef } from 'react';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
-function StatusWindow({stations}){
-  const lineCounts = {"1호선": 0, "2호선": 0, "3호선": 0, "4호선": 0, "동해선": 0, "부산김해경전철": 0};
-  const totalStations = {"1호선": 40, "2호선": 43, "3호선": 17, "4호선": 14, "동해선": 23, "부산김해경전철": 21};
+function StatusWindow({stations, correctCount, totalCount, lineInfo}){
 
-  stations.forEach(station => {
-    if (station.found){
-      lineCounts[station.line] += 1;
-    }
-  })
   return(
     <div className = "statusBox">
       <div className = "myProgress">
         <h3>발견된 역 현황</h3>
-        {Object.entries(lineCounts).map(([line, count]) => (
-          <div key = {line}>
-            {line}: {count} / {totalStations[line]} {(count/totalStations[line]*100).toFixed(2)}% 
-          </div>
+        {Array.isArray(lineInfo) && lineInfo.map((item, i) => (
+          <div key = {i}> {item.name} : {correctCount[i]} / {totalCount[i]} </div>
         ))}
       </div>
     </div>
@@ -47,6 +38,8 @@ function App() {
   const [stations, setStations] = useState([]);
   const [combinedSource, setCombinedSource] = useState(new VectorSource());
   const [answer, setAnswer] = useState("");
+  const [correctCount, setCorrectCount] = useState([0, 0, 0, 0, 0, 0]);
+  const [totalCount, setTotalCount] = useState([0, 0, 0, 0, 0, 0])
   
   const lineInfo = [
     {name: "1호선", code: "line1", color: [240, 106, 0]},
@@ -56,22 +49,6 @@ function App() {
     {name: "동해선", code: "donghae", color: [0, 84, 166]},
     {name: "부산김해경전철", code: "bgl", color: [153, 50, 204]},
   ];
-
-  const correctAnswer = (station) => {
-    const stationsSameName = stations.filter(st => st.name === station.name);
-    const lines = stationsSameName.map(st => st.line).sort().join(", ");
-    NotificationManager.success(lines, station.name.concat("역"));
-    for(const s of stationsSameName)
-      showLabel(s);
-  }
-
-  const alreadyFound = (station) => {
-    NotificationManager.info(`${station.name}역은 이미 찾은 역입니다`);
-  }
-
-  const wrongAnswer = () => {
-    NotificationManager.warning('그런 역은 없답니다?', '오답', 3000);
-  }
 
   const showLabel = (station) => {
     console.log(station);
@@ -131,28 +108,18 @@ function App() {
     for(const s of stationsSameName)
       showLabel(s);
 
-
     const updatedStations = stations.map(station => {
-      if (compareStationName(station.name, answer)) {
-        if (!station.found) {
-          if(firstMatch){
-            correctAnswer(station);
-            firstMatch = false;
-          }
-          return { ...station, found: true }; // 새로운 객체를 반환
-        } else {
-          alreadyFound(station);
-          return station;
-        }
-      }
-      return station;
+      return {...station, found: station.found || compareStationName(station.name, answer)};
     });
-  
-    // 상태를 업데이트하여 StatusWindow가 즉시 갱신되도록 합니다.
-    const isCorrect = stations.some(station => compareStationName(station.name, answer) && !station.found);
-    if (!isCorrect) {
-      wrongAnswer(answer);
+
+    const newCorrectCount = correctCount;
+    for(let i = 0; i < lineInfo.length; i++){
+      if (lines.includes(lineInfo[i].name)){
+        newCorrectCount[i] += 1;
+      }
     }
+    setCorrectCount(newCorrectCount);
+
     setStations(updatedStations);
   }
 
@@ -164,15 +131,20 @@ function App() {
 
   const loadData = function(){
     let newStations = [];
+    let totalcnt = [0, 0, 0, 0, 0, 0]
     for(let i = 0; i < lineInfo.length; i++){
       fetch(`./data/${lineInfo[i].code}.csv`)
         .then( response => response.text() )
         .then( responseText => {
           let parsedText = responseText.split("\n").map(e => e.split(","));
+          let a = newStations.length;
           newStations = newStations.concat(parsedText.map(e => ({ name: e[2].split('(')[0], lon: parseFloat(e[3]), lat: parseFloat(e[4]), line: e[1], found: false })));
+          let b = newStations.length;
+          totalcnt[i] = b - a;
           setStations(newStations);
         });
-    }          
+    }   
+    setTotalCount(totalcnt);       
   };
 
   const drawStations = () => {
@@ -279,7 +251,7 @@ function App() {
           <button id = "enter" onClick={buttonPushed}>enter</button>
         </div>
         <div id = "result"></div>
-        <StatusWindow stations = {stations} />
+        <StatusWindow stations = {stations} lineInfo = {lineInfo} correctCount = {correctCount} totalCount = {totalCount} />
         <NotificationContainer />
       </div>
     </div>
