@@ -93,7 +93,8 @@ function App() {
     const reference_dropped = reference.replace(/[^\uAC00-\uD7A3]/g, '');
     const query_dropped = query.replace(/[^\uAC00-\uD7A3]/g, '');
     if(reference_dropped === query_dropped) return true;
-    if(reference_dropped === query_dropped.slice(0, query_dropped.length - 1)) return true;
+    if(query_dropped[query_dropped.length-1] === '역' 
+      && reference_dropped === query_dropped.slice(0, query_dropped.length - 1)) return true;
     return false;
   }
 
