@@ -111,17 +111,19 @@ function App() {
 
   const buttonPushed = () => {
     inputRef.current.value = null 
+    let matchExists = false;
     for(const station of stations){
       if (station.name === answer && station.found === false){
         correctAnswer(station);
-        return;
+        matchExists = true;
       }
       else if (station.name === answer && station.found === true){
         alreadyFound(station)
         return;
       }
     }
-    wrongAnswer(answer);
+    if(!matchExists)
+      wrongAnswer(answer);
     return;
   }
 
