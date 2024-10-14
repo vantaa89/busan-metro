@@ -14,7 +14,8 @@ import { Style, Circle as CircleStyle, Fill, Stroke, } from 'ol/style';
 import { Text } from 'ol/style';
 import { Feature } from 'ol';
 import { useState, useEffect, useRef } from 'react';
-import { parse } from 'ol/expr/expression';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 function App() {
   const mapRef = useRef(null);
@@ -29,7 +30,7 @@ function App() {
     {name: "2호선", code: "line2", color: [34, 139, 34]},
     {name: "3호선", code: "line3", color: [184, 134, 11]},
     {name: "4호선", code: "line4", color: [30, 144, 255]},
-    {name: "동해", code: "donghae", color: [0, 84, 166]},
+    {name: "동해선", code: "donghae", color: [0, 84, 166]},
     {name: "부산김해경전철", code: "bgl", color: [153, 50, 204]},
   ];
 
@@ -38,21 +39,20 @@ function App() {
     {msg: "이미 찾은 역입니다", textColor: "blue", backgroundColor: "rgb(200, 200, 255)"},
     {msg: "그런역은 없답니다?", textColor: "red", backgroundColor: "rgb(255, 200, 200)"},
   ]
-
   const correctAnswer = (station) => {
-    station.found = true;
-    showLabel(station);
-    showResult(0);
+    const stationsSameName = stations.filter(st => st.name === station.name);
+    const lines = stationsSameName.map(st => st.line).join(", ");
+    NotificationManager.success(lines, station.name.concat("역"));
+    for(const s of stationsSameName)
+      showLabel(s);
   }
 
-  const alreadyFound = (station) => {
-    console.log("already found");
-    showResult(1);
+  const alreadyFound = (stationName) => {
+    NotificationManager.info(`${stationName}역은 이미 찾은 역입니다`);
   }
 
   const wrongAnswer = () => {
-    console.log("wrong answer");
-    showResult(2);
+    NotificationManager.warning('그런 역은 없답니다?', '오답', 3000);
   }
 
   const showResult = (i) => {
@@ -100,19 +100,18 @@ function App() {
 
   const buttonPushed = () => {
     inputRef.current.value = null 
-    let matchExists = false;
     for(const station of stations){
       if (station.name === answer && station.found === false){
+        station.found = true;
         correctAnswer(station);
-        matchExists = true;
+        return;
       }
       else if (station.name === answer && station.found === true){
         alreadyFound(station)
         return;
       }
     }
-    if(!matchExists)
-      wrongAnswer(answer);
+    wrongAnswer(answer);
     return;
   }
 
@@ -252,7 +251,7 @@ function App() {
         </div>
         <div id = "result"></div>
         <button id = "modalOpen" onClick={() => setOpenModal(true)}>
-          ㅅ
+          &lt;
         </button>
       
         <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
@@ -263,7 +262,7 @@ function App() {
             </button>
           </div>
         </Modal>
-
+        <NotificationContainer/>
       </div>
     </div>
     </>
