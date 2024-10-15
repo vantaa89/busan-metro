@@ -19,26 +19,11 @@ import 'react-notifications/lib/notifications.css';
 
 function StatusWindow({stations, correctCount, totalCount, lineInfo}){
 
-  const sumCorrectCount = () => {
-    let cnt = 0;
-    for (let i=0; i < correctCount.length; i++){
-      cnt += correctCount[i];
-    }
-    return cnt;
-  }
-
-  const sumTotalCount = () => {
-    let cnt = 0;
-    for (let i=0; i < totalCount.length; i++){
-      cnt += totalCount[i];
-    }
-    return cnt;
-  }
-
+  
   return(
-    <div className = "statusBox">
-      <div className = "myProgress">
-        <div id = "totalProgress"> 발견한 역: {((sumCorrectCount() / sumTotalCount()) * 100).toFixed(2)} % </div>
+    <div className="statusBox">
+      <div id = "progressTitle"> 발견한 역: {((correctCount.reduce((a, b) => a + b, 0) / totalCount.reduce((a, b) => a + b, 0)) * 100).toFixed(2)} % </div>
+      <div className="progressBars">
         {Array.isArray(lineInfo) && lineInfo.map((item, i) => (
           <>
             <div className = "lineIndex">
