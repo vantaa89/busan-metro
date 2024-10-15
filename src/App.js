@@ -115,7 +115,8 @@ function App() {
 
   useEffect(() => {
     if(currentStation !== null && map){
-      map.getView().setCenter(fromLonLat([currentStation.lon, currentStation.lat]));
+      const center = fromLonLat([currentStation.lon, currentStation.lat]);
+      map.getView().animate({ center, duration: 300, ease: 'easeOut' });
     }
   }, [currentStation]);
 
