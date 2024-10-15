@@ -41,10 +41,12 @@ function StatusWindow({ stations, correctCount, totalCount, lineInfo }) {
                   src={"icons/" + item.code + ".svg"}
                   className="lineIcon"
                 ></img>
-                {item.name}
-              </div>
-              <div key={i} className="lineProgress">
-                {correctCount[i]} / {totalCount[i]}
+                <p>
+                  {item.name}
+                </p>
+                <p style={{textAlign: 'right', color:'gray'}}>
+                  {correctCount[i]} / {totalCount[i]}
+                </p>
               </div>
               <div className="progressBar">
                 <div
@@ -322,9 +324,6 @@ function App() {
               onKeyDown={(e) => keyboardEnter(e)}
               ref={inputRef}
             />
-            <button id="enter" onClick={buttonPushed}>
-              enter
-            </button>
           </div>
           <div id="result"></div>
           <StatusWindow
