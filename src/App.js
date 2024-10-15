@@ -40,10 +40,18 @@ function StatusWindow({stations, correctCount, totalCount, lineInfo}){
       <div className = "myProgress">
         <div id = "totalProgress"> 발견한 역: {((sumCorrectCount() / sumTotalCount()) * 100).toFixed(2)} % </div>
         {Array.isArray(lineInfo) && lineInfo.map((item, i) => (
-          <div key = {i} className = "lineProgress" id = {item.code + "Progress"}>
-            <img src = {"icons/" + item.code + ".svg"} className = "lineIcon"></img>
-            {item.name} : {correctCount[i]} / {totalCount[i]} 
-           </div>
+          <>
+            <div className = "lineIndex">
+              <img src = {"icons/" + item.code + ".svg"} className = "lineIcon"></img>
+              {item.name}
+            </div>
+            <div key = {i} className = "lineProgress">
+               {correctCount[i]} / {totalCount[i]} 
+            </div>
+            <div className = "progressBar">
+              <div className = "progress" id = {item.code + "Progress"} style = {{ width: correctCount[i]/totalCount[i]*100 + "%", backgroundColor: "rgb("+lineInfo[i].color[0]+","+lineInfo[i].color[1]+","+lineInfo[i].color[2]+")"}}></div>
+            </div>
+          </>
         ))}
       </div>
     </div>
@@ -74,14 +82,13 @@ function App() {
     combinedSource.forEachFeature((feature) => {
       if (feature.get('name') === station.name && feature.get('line') === station.line) {
         const color = lineInfo.filter(line=> (line.name === station.line))[0].color;
-        console.log(color)
         const newStyle = new Style({
           image: new CircleStyle({
-            radius: 3.5,
-            fill: new Fill({ color}),
+            radius: 0,
+            fill: new Fill({color: color}),
             stroke: new Stroke({
               color: color, 
-              width: 2,
+              width: 3,
             }),
           }),
           text: new Text({
