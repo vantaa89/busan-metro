@@ -19,12 +19,31 @@ import 'react-notifications/lib/notifications.css';
 
 function StatusWindow({stations, correctCount, totalCount, lineInfo}){
 
+  const sumCorrectCount = () => {
+    let cnt = 0;
+    for (let i=0; i < correctCount.length; i++){
+      cnt += correctCount[i];
+    }
+    return cnt;
+  }
+
+  const sumTotalCount = () => {
+    let cnt = 0;
+    for (let i=0; i < totalCount.length; i++){
+      cnt += totalCount[i];
+    }
+    return cnt;
+  }
+
   return(
     <div className = "statusBox">
       <div className = "myProgress">
-        <h3>발견된 역 현황</h3>
+        <div id = "totalProgress"> 발견한 역: {((sumCorrectCount() / sumTotalCount()) * 100).toFixed(2)} % </div>
         {Array.isArray(lineInfo) && lineInfo.map((item, i) => (
-          <div key = {i}> {item.name} : {correctCount[i]} / {totalCount[i]} </div>
+          <div key = {i} className = "lineProgress" id = {item.code + "Progress"}>
+            <img src = {"icons/" + item.code + ".svg"} className = "lineIcon"></img>
+            {item.name} : {correctCount[i]} / {totalCount[i]} 
+           </div>
         ))}
       </div>
     </div>

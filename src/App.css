@@ -71,11 +71,36 @@
 }
 
 .myProgress{
-  height: 40%;
-  width: 90%;
+  height: 30%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 60px 40px 40px 40px;
   margin-top: 10px;
-  margin-left: 5%;
+  margin-left: 10px;
+  margin-right: 10px;
   border-radius: 20px 20px 20px 20px;
   z-index: 3;
   background-color: rgb(199, 255, 192);
+}
+
+#totalProgress{
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+  font-size: 30px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.lineIcon{
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.lineProgress{
+  display: flex;
+  align-items: center;
+  font-size: 15px;
 }
