@@ -74,7 +74,7 @@
   display: grid;
   row-gap: 10px;
   column-gap: 10px;
-  grid-template-columns: 110px 40px 1fr;
+  grid-template-columns: 110px 50px 1fr;
   align-items: start;
   margin: 20px 0;
   z-index: 3;
