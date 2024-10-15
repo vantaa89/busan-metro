@@ -23,16 +23,29 @@ import "react-notifications/lib/notifications.css";
 function StatusWindow({ stations, correctCount, totalCount, lineInfo }) {
   return (
     <div className="statusBox">
-      <div id="progressTitle">
-        발견한 역:{" "}
-        {(
-          (correctCount.reduce((a, b) => a + b, 0) /
-            totalCount.reduce((a, b) => a + b, 0)) *
-          100
-        ).toFixed(2)}{" "}
-        %{" "}
-      </div>
       <div className="progressBars">
+        <div id="progressTitle">
+          <p style={{fontSize: '20px'}}>Total</p>
+          <p style={{fontSize: '20px', textAlign: 'right'}}>{(
+            (correctCount.reduce((a, b) => a + b, 0) /
+              totalCount.reduce((a, b) => a + b, 0)) *
+            100
+          ).toFixed(2)}{" "}
+          %{" "}</p>
+        </div>
+
+        <div id="totalProgressBar">
+          <div 
+            id="totalProgress"
+            style={{
+              width: (correctCount.reduce((a, b) => a + b, 0) /
+                      totalCount.reduce((a, b) => a + b, 0)) *
+                      100 + "%"
+            }}
+            >
+          </div>
+        </div>
+
         {Array.isArray(lineInfo) &&
           lineInfo.map((item, i) => (
             <>
@@ -116,7 +129,7 @@ function App() {
   useEffect(() => {
     if(currentStation !== null && map){
       const center = fromLonLat([currentStation.lon, currentStation.lat]);
-      map.getView().animate({ center, duration: 300, ease: 'easeOut' });
+      map.getView().animate({ center, duration: 300, ease: 'easeOut', zoom: 13.5 });
     }
   }, [currentStation]);
 
