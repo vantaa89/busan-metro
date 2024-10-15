@@ -77,10 +77,10 @@ function App() {
   const inputRef = useRef(null);
   const [stations, setStations] = useState([]);
   const [combinedSource, setCombinedSource] = useState(new VectorSource());
-  const [answer, setAnswer] = useState("");
+  
   const [correctCount, setCorrectCount] = useState([0, 0, 0, 0, 0, 0]);
   const [totalCount, setTotalCount] = useState([0, 0, 0, 0, 0, 0]);
-
+  const [currentStation, setCurrentStation] = useState(null);
   const lineInfo = [
     { name: "1호선", code: "line1", color: [240, 106, 0] },
     { name: "2호선", code: "line2", color: [34, 139, 34] },
@@ -89,6 +89,35 @@ function App() {
     { name: "동해선", code: "donghae", color: [0, 84, 166] },
     { name: "부산김해경전철", code: "bgl", color: [153, 50, 204] },
   ];
+
+
+  const tilelayer = new TileLayer({
+    source: new XYZ({
+      url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      maxZoom: 13,
+    }),
+    opacity: 1,
+  });
+
+  const vectorLayer = new VectorLayer({
+    source: combinedSource,
+  });
+
+  const [map] = useState(new OlMap({
+    controls: defaults({ zoom: false, rotate: false, attribution: false }),
+    layers: [tilelayer, vectorLayer],
+    view: new View({
+      center: fromLonLat([129.059556, 35.158282]), // 서면역
+      zoom: 12,
+      maxZoom: 15,
+    }),
+  }));
+
+  useEffect(() => {
+    if(currentStation !== null && map){
+      map.getView().setCenter(fromLonLat([currentStation.lon, currentStation.lat]));
+    }
+  }, [currentStation]);
 
   const showLabel = (station) => {
     console.log(station);
@@ -159,9 +188,10 @@ function App() {
       .map((st) => st.line)
       .sort()
       .join(", ");
+
     NotificationManager.success(lines, stationsSameName[0].name.concat("역"));
     for (const s of stationsSameName) showLabel(s);
-
+    setCurrentStation(stationsSameName[0]);
     const updatedStations = stations.map((station) => {
       return {
         ...station,
@@ -284,29 +314,12 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    const tilelayer = new TileLayer({
-      source: new XYZ({
-        url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        maxZoom: 13,
-      }),
-      opacity: 1,
-    });
 
-    const vectorLayer = new VectorLayer({
-      source: combinedSource,
-    });
-    const map = new OlMap({
-      controls: defaults({ zoom: false, rotate: false, attribution: false }),
-      layers: [tilelayer, vectorLayer],
-      view: new View({
-        center: fromLonLat([129.059556, 35.158282]), // 서면역
-        zoom: 12,
-        maxZoom: 15,
-      }),
-    });
+
+  useEffect(() => {
     map.setTarget(mapRef.current || "");
     loadData();
+
   }, []);
 
   useEffect(() => {
