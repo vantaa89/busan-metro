@@ -24,7 +24,6 @@ function StatusWindow({ stations, correctCount, totalCount, lineInfo }) {
   return (
     <div className="statusBox">
       <div id="progressTitle">
-        {" "}
         발견한 역:{" "}
         {(
           (correctCount.reduce((a, b) => a + b, 0) /
@@ -108,7 +107,7 @@ function App() {
             }),
           }),
           text: new Text({
-            font: "12px Calibri,sans-serif",
+            font: "12px Spoqa Han Sans Neo",
             fill: new Fill({ color: "black" }),
             stroke: new Stroke({
               color: "white",
