@@ -11,6 +11,7 @@ import VectorSource from "ol/source/Vector";
 import { defaults } from "ol/control/defaults";
 import { LineString, Point } from "ol/geom";
 import { Style, Circle as CircleStyle, Fill, Stroke } from "ol/style";
+import Icon from 'ol/style/Icon';
 import { Text } from "ol/style";
 import { Feature } from "ol";
 import { useState, useEffect, useRef } from "react";
@@ -133,7 +134,7 @@ function App() {
     }
   }, [currentStation]);
 
-  const showLabel = (station) => {
+  const showLabel = (station, n) => {
     console.log(station);
     combinedSource.forEachFeature((feature) => {
       if (
@@ -142,27 +143,51 @@ function App() {
       ) {
         const color = lineInfo.filter((line) => line.name === station.line)[0]
           .color;
-        const newStyle = new Style({
-          image: new CircleStyle({
-            radius: 0,
-            fill: new Fill({ color: color }),
-            stroke: new Stroke({
-              color: color,
-              width: 3,
+        if (n == 1){
+          const newStyle = new Style({
+            image: new CircleStyle({
+              radius: 3,
+              fill: new Fill({ color: color }),
+              stroke: new Stroke({
+                color: color,
+                width: 3,
+              }),
             }),
-          }),
-          text: new Text({
-            font: "12px Spoqa Han Sans Neo",
-            fill: new Fill({ color: "black" }),
-            stroke: new Stroke({
-              color: "white",
-              width: 2,
+            text: new Text({
+              font: "12px Spoqa Han Sans Neo",
+              fill: new Fill({ color: "black" }),
+              stroke: new Stroke({
+                color: "white",
+                width: 2,
+              }),
+              offsetY: -15,
+              text: station.name,
             }),
-            offsetY: -15,
-            text: station.name,
-          }),
-        });
-        feature.setStyle(newStyle);
+          });
+          feature.setStyle(newStyle);
+        }
+        else {
+          const newStyle = new Style({
+            image: new Icon({
+              anchor: [0.5,0.5],
+              src: 'icons/transfer.svg',
+              scale: 0.03
+            }),
+            text: new Text({
+              font: "12px Spoqa Han Sans Neo",
+              fill: new Fill({ color: "black" }),
+              stroke: new Stroke({
+                color: "white",
+                width: 2,
+              }),
+              offsetY: -15,
+              text: station.name,
+            }),
+            zIndex: 3
+          });
+          feature.setStyle(newStyle);
+        }
+        
       }
     });
   };
@@ -204,7 +229,7 @@ function App() {
       .join(", ");
 
     NotificationManager.success(lines, stationsSameName[0].name.concat("역"));
-    for (const s of stationsSameName) showLabel(s);
+    for (const s of stationsSameName) showLabel(s, stationsSameName.length);
     setCurrentStation(stationsSameName[0]);
     const updatedStations = stations.map((station) => {
       return {
