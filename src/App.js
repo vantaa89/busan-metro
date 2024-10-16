@@ -303,17 +303,7 @@ function App() {
               color: color,
               width: 2,
             }),
-          }),
-          text: new Text({
-            font: "12px Calibri,sans-serif",
-            fill: new Fill({ color: "rgba(0, 0, 0, 0)" }),
-            stroke: new Stroke({
-              color: "rgba(0, 0, 0, 0)",
-              width: 2,
-            }),
-            offsetY: -15,
-            text: station.name,
-          }),
+          })
         })
       );
       combinedSource.addFeature(pointFeature);
