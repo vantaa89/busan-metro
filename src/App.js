@@ -86,6 +86,49 @@ function StatusWindow({ stations, correctCount, totalCount, lineInfo }) {
   );
 }
 
+function BuyMeCoffee() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 모달 열기
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // 모달 외부를 클릭했을 때 닫기
+  const handleOutsideClick = (e) => {
+    if (e.target.className === 'modal-background') {
+      closeModal();
+    }
+  };
+
+  return (
+    <div>
+      <button id = "buyCoffee" onClick={openModal}>
+        <img src="icons/coffee.png" id="coffeeIcon"></img>
+      </button>
+
+      {isModalOpen && (
+        <div className="modal-background" onClick={handleOutsideClick}>
+          <div className="modal-content">
+            <img src="icons/coffeetime.jpeg" id="coffeetime"></img>
+            <button id="coffeeClose" onClick={closeModal}>
+              <img src="icons/close.png" id="closeIcon"></img>
+            </button>
+            <p style={{ width: '100%', textAlign: 'center', fontSize: '23px' }}>Enjoying the game?</p>
+            <p style={{ width: '100%', textAlign: 'center', fontSize: '13px' }}>Support us with a cup of coffee!</p>
+            <img src="icons/coffeeqr.jpg" id="coffeeQR"></img>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const mapRef = useRef(null);
   const inputRef = useRef(null);
@@ -95,6 +138,8 @@ function App() {
   const [correctCount, setCorrectCount] = useState([0, 0, 0, 0, 0, 0]);
   const [totalCount, setTotalCount] = useState([0, 0, 0, 0, 0, 0]);
   const [currentStation, setCurrentStation] = useState(null);
+  const [open, setOpen] = useState(false);
+
   const lineInfo = [
     { name: "1호선", code: "line1", color: [240, 106, 0] },
     { name: "2호선", code: "line2", color: [34, 139, 34] },
@@ -167,7 +212,7 @@ function App() {
             image: new Icon({
               anchor: [0.5,0.5],
               src: 'icons/transfer.svg',
-              scale: 0.03
+              scale: 0.02
             }),
             text: new Text({
               font: "12px Spoqa Han Sans Neo",
@@ -394,6 +439,7 @@ function App() {
             totalCount={totalCount}
           />
           <NotificationContainer />
+          <BuyMeCoffee />
         </div>
       </div>
     </>
