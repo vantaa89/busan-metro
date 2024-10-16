@@ -103,7 +103,26 @@ function App() {
     { name: "동해선", code: "donghae", color: [0, 84, 166] },
     { name: "부산김해경전철", code: "bgl", color: [153, 50, 204] },
   ];
+  const transferStations = [
+    { name: "동래", lines: ["1호선", "4호선"] },
+    { name: "미남", lines: ["3호선", "4호선"] },
+    { name: "거제", lines: ["3호선", "동해선"] },
+    { name: "연산", lines: ["1호선", "3호선"] },
+    { name: "대저", lines: ["3호선", "부산김해경전철"] },
+    { name: "수영", lines: ["2호선", "3호선"] },
+    { name: "덕천", lines: ["2호선", "3호선"] },
+    { name: "벡스코", lines: ["2호선", "동해선"] },
+    { name: "교대", lines: ["1호선", "동해선"] },
+    { name: "사상", lines: ["2호선", "김해선"] },
+    { name: "서면", lines: ["1호선", "2호선"] },
+  ]
 
+  const isTransferStation = (station) => {
+    return transferStations.some(
+      (st) =>
+        st.name === station.name && st.lines.includes(station.line)
+    );
+  }
 
   const tilelayer = new TileLayer({
     source: new XYZ({
@@ -134,16 +153,38 @@ function App() {
     }
   }, [currentStation]);
 
-  const showLabel = (station, n) => {
+  const showLabel = (station) => {
     console.log(station);
     combinedSource.forEachFeature((feature) => {
       if (
         feature.get("name") === station.name &&
         feature.get("line") === station.line
       ) {
-        const color = lineInfo.filter((line) => line.name === station.line)[0]
-          .color;
-        if (n == 1){
+        const color = lineInfo.filter((line) => line.name === station.line)[0].color;
+        
+        if (isTransferStation(station)){
+          const newStyle = new Style({
+            image: new Icon({
+              anchor: [0.5,0.5],
+              src: 'icons/transfer.svg',
+              scale: 0.03
+            }),
+            text: new Text({
+              font: "12px Spoqa Han Sans Neo",
+              fill: new Fill({ color: "black" }),
+              stroke: new Stroke({
+                color: "white",
+                width: 2,
+              }),
+              offsetY: -15,
+              text: station.name,
+            }),
+            zIndex: 3
+          });
+          feature.setStyle(newStyle);
+        }
+
+        else{
           const newStyle = new Style({
             image: new CircleStyle({
               radius: 3,
@@ -166,28 +207,6 @@ function App() {
           });
           feature.setStyle(newStyle);
         }
-        else {
-          const newStyle = new Style({
-            image: new Icon({
-              anchor: [0.5,0.5],
-              src: 'icons/transfer.svg',
-              scale: 0.03
-            }),
-            text: new Text({
-              font: "12px Spoqa Han Sans Neo",
-              fill: new Fill({ color: "black" }),
-              stroke: new Stroke({
-                color: "white",
-                width: 2,
-              }),
-              offsetY: -15,
-              text: station.name,
-            }),
-            zIndex: 3
-          });
-          feature.setStyle(newStyle);
-        }
-        
       }
     });
   };
@@ -212,7 +231,7 @@ function App() {
     );
     if (stationsSameName.length === 0) {
       // wrong station name
-      NotificationManager.warning("그런 역은 없답니다?", "오답");
+      NotificationManager.warning("존재하지 않는 역입니다", "오답");
       return;
     }
     if (stationsSameName[0].found) {
@@ -229,7 +248,7 @@ function App() {
       .join(", ");
 
     NotificationManager.success(lines, stationsSameName[0].name.concat("역"));
-    for (const s of stationsSameName) showLabel(s, stationsSameName.length);
+    for (const s of stationsSameName) showLabel(s);
     setCurrentStation(stationsSameName[0]);
     const updatedStations = stations.map((station) => {
       return {
