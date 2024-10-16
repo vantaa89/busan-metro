@@ -79,9 +79,9 @@
 
 #progressTitle{
   display: grid;
-  width: 100%;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 30px 20px;
+  margin: -10px 0;
+  width: 100%;
 }
 
 .lineIcon{
@@ -125,6 +125,7 @@
   background-color: #EEE;
   border-radius: 8px;
   overflow: hidden;
+  margin-top: 0;
   margin-bottom: 10px;
 }
 
@@ -132,7 +133,7 @@
   height: 100%;
   border-radius: 8px;
   transition: width 0.5s ease-in-out;
-  background-color: hotpink;
+  background: #444; 
 }
 
 #buyCoffee {
