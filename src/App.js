@@ -138,8 +138,6 @@ function App() {
   const [correctCount, setCorrectCount] = useState([0, 0, 0, 0, 0, 0]);
   const [totalCount, setTotalCount] = useState([0, 0, 0, 0, 0, 0]);
   const [currentStation, setCurrentStation] = useState(null);
-  const [open, setOpen] = useState(false);
-
   const lineInfo = [
     { name: "1호선", code: "line1", color: [240, 106, 0] },
     { name: "2호선", code: "line2", color: [34, 139, 34] },
@@ -215,7 +213,6 @@ function App() {
               scale: 0.02
             }),
             text: new Text({
-              font: "12px Spoqa Han Sans Neo",
               fill: new Fill({ color: "black" }),
               stroke: new Stroke({
                 color: "white",
@@ -240,7 +237,6 @@ function App() {
               }),
             }),
             text: new Text({
-              font: "12px Spoqa Han Sans Neo",
               fill: new Fill({ color: "black" }),
               stroke: new Stroke({
                 color: "white",
