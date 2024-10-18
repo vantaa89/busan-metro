@@ -109,19 +109,73 @@ function BuyMeCoffee() {
   return (
     <div>
       <button id = "buyCoffee" onClick={openModal}>
-        <img src="icons/coffee.png" id="coffeeIcon"></img>
+        <img src="icons/coffee.png" className="buttonimg"></img>
       </button>
 
       {isModalOpen && (
         <div className="modal-background" onClick={handleOutsideClick}>
-          <div className="modal-content">
+          <div id="coffeemodal-content">
             <img src="icons/coffeetime.jpeg" id="coffeetime"></img>
-            <button id="coffeeClose" onClick={closeModal}>
+            <button className="close" onClick={closeModal}>
               <img src="icons/close.png" id="closeIcon"></img>
             </button>
             <p style={{ width: '100%', textAlign: 'center', fontSize: '23px' }}>Enjoying the game?</p>
             <p style={{ width: '100%', textAlign: 'center', fontSize: '13px' }}>Support us with a cup of coffee!</p>
             <img src="icons/coffeeqr.jpg" id="coffeeQR"></img>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DeveloperInfo() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 모달 열기
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // 모달 외부를 클릭했을 때 닫기
+  const handleOutsideClick = (e) => {
+    if (e.target.className === 'modal-background') {
+      closeModal();
+    }
+  };
+
+  return (
+    <div>
+      <button id = "developerInfo" onClick={openModal}>
+        <img src="icons/info.png" className="buttonimg"></img>
+      </button>
+
+      {isModalOpen && (
+        <div className="modal-background" onClick={handleOutsideClick}>
+          <div id="infomodal-content">
+            <button className="close" onClick={closeModal}>
+              <img src="icons/close.png" id="closeIcon"></img>
+            </button>
+            <div id="infogrid">
+              <p style={{ width: '100%', textAlign: 'center', fontSize: '23px', gridColumn: 'span 2' }}>About Us</p>
+              <p style={{ textAlign: 'center', fontSize: '15px'}}>Wonchan Shin</p>
+              <p style={{ textAlign: 'center', fontSize: '15px'}}>Seojune Lee</p>
+              <img src="icons/wonchan.jpg" className="developerimg"></img>
+              <img src="icons/seojune.jpg" className="developerimg"></img>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-SNU ECE 21</p>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-내용을 입력하세요</p>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-Korea Science Academy of KAIST</p>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-내용을 입력하시든지</p>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-Son of Busan Metropolitan City</p>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-말든지</p>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-shin5475612@gmail.com</p>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-몰루?</p>
+            </div>
           </div>
         </div>
       )}
@@ -436,6 +490,7 @@ function App() {
           />
           <NotificationContainer />
           <BuyMeCoffee />
+          <DeveloperInfo />
         </div>
       </div>
     </>
