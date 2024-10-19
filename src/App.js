@@ -183,6 +183,44 @@ function DeveloperInfo() {
   );
 }
 
+function Success({ correctCount, totalCount}) {
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 모달 열기
+  const openModal = (correctCount, totalCount) => {
+    if(correctCount == totalCount){
+      setIsModalOpen(true);
+    }
+  };
+
+  // 모달 닫기
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // 모달 외부를 클릭했을 때 닫기
+  const handleOutsideClick = (e) => {
+    if (e.target.className === 'modal-background') {
+      closeModal();
+    }
+  };
+
+  return(
+    <div>
+      {isModalOpen && (
+        <div className="modal-background" onClick={handleOutsideClick}>
+          <div id="infomodal-content">
+            <button className="close" onClick={closeModal}>
+              <img src="icons/close.png" id="closeIcon"></img>
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const mapRef = useRef(null);
   const inputRef = useRef(null);
@@ -192,6 +230,7 @@ function App() {
   const [correctCount, setCorrectCount] = useState([0, 0, 0, 0, 0, 0]);
   const [totalCount, setTotalCount] = useState([0, 0, 0, 0, 0, 0]);
   const [currentStation, setCurrentStation] = useState(null);
+
   const lineInfo = [
     { name: "1호선", code: "line1", color: [240, 106, 0] },
     { name: "2호선", code: "line2", color: [34, 139, 34] },
@@ -240,6 +279,7 @@ function App() {
       center: fromLonLat([129.059556, 35.158282]), // 서면역
       zoom: 12,
       maxZoom: 15,
+      minZoom: 11,
     }),
   }));
 
@@ -361,6 +401,7 @@ function App() {
     setCorrectCount(newCorrectCount);
 
     setStations(updatedStations);
+
   };
 
   const keyboardEnter = (e) => {
@@ -408,18 +449,32 @@ function App() {
       } catch {
         color = "black";
       }
-      pointFeature.setStyle(
-        new Style({
-          image: new CircleStyle({
-            radius: 3,
-            fill: new Fill({ color: "white" }),
-            stroke: new Stroke({
-              color: color,
-              width: 2,
+      if (isTransferStation(station)){
+        pointFeature.setStyle(
+          new Style({
+            image: new Icon({
+            anchor: [0.5,0.5],
+            src: 'icons/transfer.svg',
+            scale: 0.02
             }),
+            zIndex: 3,
           })
-        })
-      );
+        )
+      }
+      else{
+        pointFeature.setStyle(
+          new Style({
+            image: new CircleStyle({
+              radius: 3,
+              fill: new Fill({ color: "white" }),
+              stroke: new Stroke({
+                color: color,
+                width: 2,
+              }),
+            })
+          })
+        );
+      }
       combinedSource.addFeature(pointFeature);
     });
     setCombinedSource(combinedSource);
@@ -457,7 +512,17 @@ function App() {
     }
   };
 
+    
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.ctrlKey && event.shiftKey && event.key === 'M') {
+        setCorrectCount(totalCount); // 모든 문제를 맞춘 상태로 변경
+      }
+    };
 
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [totalCount]);
 
   useEffect(() => {
     map.setTarget(mapRef.current || "");
@@ -469,6 +534,18 @@ function App() {
     drawStations();
     drawLines();
   }, [stations]);
+
+    //개발자용 치트
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.ctrlKey && event.shiftKey && event.key === 'M') {
+        setCorrectCount(totalCount); // 모든 문제를 맞춘 상태로 변경
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [totalCount]);
 
   return (
     <>
