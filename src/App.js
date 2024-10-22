@@ -228,7 +228,7 @@ function Success({ correctCount, totalCount }) {
             <button className="close" onClick={closeModal}>
               <img src="icons/close.png" id="closeIcon"></img>
             </button>
-            <p style={{ width: '100%', textAlign: 'center', fontSize: '50px' }}>Congratulations!</p>
+            <p style={{ width: '100%', textAlign: 'center', fontSize: '50px' }}>🎉Congratulations!🎉</p>
             <p style={{ width: '100%', textAlign: 'center', fontSize: '20px' }}>You deserve the honorary citizenship of Busan Metropolitan City!</p>
             <p style={{ width: '100%', textAlign: 'center', fontSize: '20px' }}>부산 함 놀러오시면 저희가 마 풀코스로 함 쏘겠습니다</p>
           </div>
