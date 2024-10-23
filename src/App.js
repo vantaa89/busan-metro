@@ -291,7 +291,6 @@ function App() {
   }, [currentStation]);
 
   const showLabel = (station) => {
-    console.log(station);
     combinedSource.forEachFeature((feature) => {
       if (
         feature.get("name") === station.name &&
