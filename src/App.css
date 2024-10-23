@@ -224,3 +224,13 @@
   border-radius: 50%;
 }
 
+#successmodal-content {
+  position: relative;
+  z-index: 4;
+  width: 700px;
+  height: 500px;
+  top: 250px;
+  border-radius: 20px 20px 20px 20px;
+  background-color: white;
+  justify-content: center;
+}

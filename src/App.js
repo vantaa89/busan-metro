@@ -20,6 +20,7 @@ import {
   NotificationManager,
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
+import JSConfetti from "js-confetti";
 
 function StatusWindow({ stations, correctCount, totalCount, lineInfo }) {
   return (
@@ -167,14 +168,10 @@ function DeveloperInfo() {
               <p style={{ textAlign: 'center', fontSize: '15px'}}>Seojune Lee</p>
               <img src="icons/wonchan.jpg" className="developerimg"></img>
               <img src="icons/seojune.jpg" className="developerimg"></img>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-SNU ECE 21</p>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-내용을 입력하세요</p>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-Korea Science Academy of KAIST</p>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-내용을 입력하시든지</p>
               <p style={{textAlign: 'left', fontSize: '12px'}}>-Son of Busan Metropolitan City</p>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-말든지</p>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-shin5475612@gmail.com</p>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-몰루?</p>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-seojune.site</p>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-https://github.com/1chan0615</p>
+              <p style={{textAlign: 'left', fontSize: '12px'}}>-https://github.com/vantaa89/</p>
             </div>
           </div>
         </div>
@@ -183,43 +180,64 @@ function DeveloperInfo() {
   );
 }
 
-function Success({ correctCount, totalCount}) {
-  
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 모달 열기
-  const openModal = (correctCount, totalCount) => {
-    if(correctCount == totalCount){
-      setIsModalOpen(true);
+function Success({ correctCount, totalCount }) {
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (correctCount == totalCount) {
+      setShowModal(true);
+      showConfetti();
+    } else {
+      setShowModal(false);
     }
-  };
+  }, [correctCount, totalCount]);
 
-  // 모달 닫기
   const closeModal = () => {
-    setIsModalOpen(false);
+    setShowModal(false);
   };
 
-  // 모달 외부를 클릭했을 때 닫기
   const handleOutsideClick = (e) => {
     if (e.target.className === 'modal-background') {
       closeModal();
     }
   };
 
-  return(
+  const jsConfetti = new JSConfetti(); 
+
+  const showConfetti = () => {
+    jsConfetti.addConfetti({
+      confettiColors: [
+        "blue",
+        "red",
+        "yellow",
+        "green",
+        "pink",
+        "purple",
+      ],
+      confettiRadius: 5,
+      confettiNumber: 500,
+    });
+  };
+
+  return (
     <div>
-      {isModalOpen && (
+      {showModal && (
         <div className="modal-background" onClick={handleOutsideClick}>
-          <div id="infomodal-content">
+          <div id="successmodal-content">
             <button className="close" onClick={closeModal}>
               <img src="icons/close.png" id="closeIcon"></img>
             </button>
+            <p style={{ width: '100%', textAlign: 'center', fontSize: '50px' }}>🎉Congratulations!🎉</p>
+            <p style={{ width: '100%', textAlign: 'center', fontSize: '20px' }}>You deserve the honorary citizenship of Busan Metropolitan City!</p>
+            <p style={{ width: '100%', textAlign: 'center', fontSize: '20px' }}>부산 함 놀러오시면 저희가 마 풀코스로 함 쏘겠습니다</p>
           </div>
         </div>
       )}
     </div>
   );
 }
+
 
 function App() {
   const mapRef = useRef(null);
@@ -297,50 +315,24 @@ function App() {
         feature.get("line") === station.line
       ) {
         const color = lineInfo.filter((line) => line.name === station.line)[0].color;
-        
-        if (isTransferStation(station)){
-          const newStyle = new Style({
-            image: new Icon({
-              anchor: [0.5,0.5],
-              src: 'icons/transfer.svg',
-              scale: 0.02
-            }),
-            text: new Text({
-              fill: new Fill({ color: "black" }),
-              stroke: new Stroke({
-                color: "white",
-                width: 2,
-              }),
-              offsetY: -15,
-              text: station.name,
-            }),
-            zIndex: 3
-          });
-          feature.setStyle(newStyle);
-        }
 
-        else{
-          const newStyle = new Style({
-            image: new CircleStyle({
-              radius: 3,
-              fill: new Fill({ color: color }),
-              stroke: new Stroke({
-                color: color,
-                width: 3,
-              }),
+        const newStyle = new Style({
+          image: new CircleStyle({
+            radius: 3,
+            fill: new Fill({color: color}),
+            stroke: new Stroke({
+              color: color,
+              width: 3,
             }),
-            text: new Text({
-              fill: new Fill({ color: "black" }),
-              stroke: new Stroke({
-                color: "white",
-                width: 2,
-              }),
-              offsetY: -15,
-              text: station.name,
-            }),
-          });
-          feature.setStyle(newStyle);
-        }
+          }),
+          text: new Text({
+            fill: new Fill({ color: "black" }),
+            offsetY: -15,
+            text: station.name,
+          }),
+        });
+        feature.setStyle(newStyle);
+        console.log(newStyle.getImage());
       }
     });
   };
@@ -567,6 +559,7 @@ function App() {
           <NotificationContainer />
           <BuyMeCoffee />
           <DeveloperInfo />
+          <Success correctCount={correctCount} totalCount={totalCount} />
         </div>
       </div>
     </>
