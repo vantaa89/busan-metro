@@ -538,18 +538,6 @@ function App() {
     drawLines();
   }, [stations]);
 
-  //개발자용 치트
-  useEffect(() => {
-    const handleKeyPress = (event) => {
-      if (event.ctrlKey && event.shiftKey && event.key === "M") {
-        setCorrectCount(totalCount); // 모든 문제를 맞춘 상태로 변경
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [totalCount]);
-
   return (
     <>
       <div className="App">
