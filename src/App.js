@@ -11,7 +11,7 @@ import VectorSource from "ol/source/Vector";
 import { defaults } from "ol/control/defaults";
 import { LineString, Point } from "ol/geom";
 import { Style, Circle as CircleStyle, Fill, Stroke } from "ol/style";
-import Icon from 'ol/style/Icon';
+import Icon from "ol/style/Icon";
 import { Text } from "ol/style";
 import { Feature } from "ol";
 import { useState, useEffect, useRef } from "react";
@@ -27,25 +27,28 @@ function StatusWindow({ stations, correctCount, totalCount, lineInfo }) {
     <div className="statusBox">
       <div className="progressBars">
         <div id="progressTitle">
-          <p style={{fontSize: '20px'}}>Total</p>
-          <p style={{fontSize: '20px', textAlign: 'right'}}>{(
-            (correctCount.reduce((a, b) => a + b, 0) /
-              totalCount.reduce((a, b) => a + b, 0)) *
-            100
-          ).toFixed(2)}{" "}
-          %{" "}</p>
+          <p style={{ fontSize: "20px" }}>Total</p>
+          <p style={{ fontSize: "20px", textAlign: "right" }}>
+            {(
+              (correctCount.reduce((a, b) => a + b, 0) /
+                totalCount.reduce((a, b) => a + b, 0)) *
+              100
+            ).toFixed(2)}{" "}
+            %{" "}
+          </p>
         </div>
 
         <div id="totalProgressBar">
-          <div 
+          <div
             id="totalProgress"
             style={{
-              width: (correctCount.reduce((a, b) => a + b, 0) /
-                      totalCount.reduce((a, b) => a + b, 0)) *
-                      100 + "%"
+              width:
+                (correctCount.reduce((a, b) => a + b, 0) /
+                  totalCount.reduce((a, b) => a + b, 0)) *
+                  100 +
+                "%",
             }}
-            >
-          </div>
+          ></div>
         </div>
 
         {Array.isArray(lineInfo) &&
@@ -56,10 +59,8 @@ function StatusWindow({ stations, correctCount, totalCount, lineInfo }) {
                   src={"icons/" + item.code + ".svg"}
                   className="lineIcon"
                 ></img>
-                <p>
-                  {item.name}
-                </p>
-                <p style={{textAlign: 'right', color:'gray'}}>
+                <p>{item.name}</p>
+                <p style={{ textAlign: "right", color: "gray" }}>
                   {correctCount[i]} / {totalCount[i]}
                 </p>
               </div>
@@ -102,14 +103,14 @@ function BuyMeCoffee() {
 
   // 모달 외부를 클릭했을 때 닫기
   const handleOutsideClick = (e) => {
-    if (e.target.className === 'modal-background') {
+    if (e.target.className === "modal-background") {
       closeModal();
     }
   };
 
   return (
     <div>
-      <button id = "buyCoffee" onClick={openModal}>
+      <button id="buyCoffee" onClick={openModal}>
         <img src="icons/coffee.png" className="buttonimg"></img>
       </button>
 
@@ -120,8 +121,12 @@ function BuyMeCoffee() {
             <button className="close" onClick={closeModal}>
               <img src="icons/close.png" id="closeIcon"></img>
             </button>
-            <p style={{ width: '100%', textAlign: 'center', fontSize: '23px' }}>Enjoying the game?</p>
-            <p style={{ width: '100%', textAlign: 'center', fontSize: '13px' }}>Support us with a cup of coffee!</p>
+            <p style={{ width: "100%", textAlign: "center", fontSize: "23px" }}>
+              Enjoying the game?
+            </p>
+            <p style={{ width: "100%", textAlign: "center", fontSize: "13px" }}>
+              Support us with a cup of coffee!
+            </p>
             <img src="icons/coffeeqr.jpg" id="coffeeQR"></img>
           </div>
         </div>
@@ -145,14 +150,14 @@ function DeveloperInfo() {
 
   // 모달 외부를 클릭했을 때 닫기
   const handleOutsideClick = (e) => {
-    if (e.target.className === 'modal-background') {
+    if (e.target.className === "modal-background") {
       closeModal();
     }
   };
 
   return (
     <div>
-      <button id = "developerInfo" onClick={openModal}>
+      <button id="developerInfo" onClick={openModal}>
         <img src="icons/info.png" className="buttonimg"></img>
       </button>
 
@@ -163,15 +168,42 @@ function DeveloperInfo() {
               <img src="icons/close.png" id="closeIcon"></img>
             </button>
             <div id="infogrid">
-              <p style={{ width: '100%', textAlign: 'center', fontSize: '23px', gridColumn: 'span 2' }}>About Us</p>
-              <p style={{ textAlign: 'center', fontSize: '15px'}}>Wonchan Shin</p>
-              <p style={{ textAlign: 'center', fontSize: '15px'}}>Seojune Lee</p>
+              <p
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  fontSize: "23px",
+                  gridColumn: "span 2",
+                }}
+              >
+                About Us
+              </p>
+              <p style={{ textAlign: "center", fontSize: "15px" }}>
+                Wonchan Shin
+              </p>
+              <p style={{ textAlign: "center", fontSize: "15px" }}>
+                Seojune Lee
+              </p>
               <img src="icons/wonchan.jpg" className="developerimg"></img>
-              <img src="icons/seojune.jpg" className="developerimg"></img>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-Son of Busan Metropolitan City</p>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-seojune.site</p>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-https://github.com/1chan0615</p>
-              <p style={{textAlign: 'left', fontSize: '12px'}}>-https://github.com/vantaa89/</p>
+              <img src="https://seojune.site/static/profile_pic.jpeg" className="developerimg"></img>
+              <p style={{ textAlign: "left", fontSize: "12px" }}>-SNU ECE 21</p>
+              <p style={{ textAlign: "left", fontSize: "12px" }}>
+                <a href="https://seojune.site/">Personal Blog</a>
+              </p>
+              <p style={{ textAlign: "left", fontSize: "12px" }}>
+                -Korea Science Academy of KAIST
+              </p>
+              <p style={{ textAlign: "left", fontSize: "12px" }}>
+                
+              </p>
+              <p style={{ textAlign: "left", fontSize: "12px" }}>
+                -Son of Busan Metropolitan City
+              </p>
+              <p style={{ textAlign: "left", fontSize: "12px" }}></p>
+              <p style={{ textAlign: "left", fontSize: "12px" }}>
+                -shin5475612@gmail.com
+              </p>
+              <p style={{ textAlign: "left", fontSize: "12px" }}></p>
             </div>
           </div>
         </div>
@@ -180,57 +212,36 @@ function DeveloperInfo() {
   );
 }
 
-
 function Success({ correctCount, totalCount }) {
-  const [showModal, setShowModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
+  // 모달 열기
+  const openModal = (correctCount, totalCount) => {
     if (correctCount == totalCount) {
-      setShowModal(true);
-      showConfetti();
-    } else {
-      setShowModal(false);
+      setIsModalOpen(true);
     }
-  }, [correctCount, totalCount]);
-
-  const closeModal = () => {
-    setShowModal(false);
   };
 
+  // 모달 닫기
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // 모달 외부를 클릭했을 때 닫기
   const handleOutsideClick = (e) => {
-    if (e.target.className === 'modal-background') {
+    if (e.target.className === "modal-background") {
       closeModal();
     }
   };
 
-  const jsConfetti = new JSConfetti(); 
-
-  const showConfetti = () => {
-    jsConfetti.addConfetti({
-      confettiColors: [
-        "blue",
-        "red",
-        "yellow",
-        "green",
-        "pink",
-        "purple",
-      ],
-      confettiRadius: 5,
-      confettiNumber: 500,
-    });
-  };
-
   return (
     <div>
-      {showModal && (
+      {isModalOpen && (
         <div className="modal-background" onClick={handleOutsideClick}>
-          <div id="successmodal-content">
+          <div id="infomodal-content">
             <button className="close" onClick={closeModal}>
               <img src="icons/close.png" id="closeIcon"></img>
             </button>
-            <p style={{ width: '100%', textAlign: 'center', fontSize: '50px' }}>🎉Congratulations!🎉</p>
-            <p style={{ width: '100%', textAlign: 'center', fontSize: '20px' }}>You deserve the honorary citizenship of Busan Metropolitan City!</p>
-            <p style={{ width: '100%', textAlign: 'center', fontSize: '20px' }}>부산 함 놀러오시면 저희가 마 풀코스로 함 쏘겠습니다</p>
           </div>
         </div>
       )}
@@ -238,13 +249,12 @@ function Success({ correctCount, totalCount }) {
   );
 }
 
-
 function App() {
   const mapRef = useRef(null);
   const inputRef = useRef(null);
   const [stations, setStations] = useState([]);
   const [combinedSource, setCombinedSource] = useState(new VectorSource());
-  
+
   const [correctCount, setCorrectCount] = useState([0, 0, 0, 0, 0, 0]);
   const [totalCount, setTotalCount] = useState([0, 0, 0, 0, 0, 0]);
   const [currentStation, setCurrentStation] = useState(null);
@@ -269,14 +279,13 @@ function App() {
     { name: "교대", lines: ["1호선", "동해선"] },
     { name: "사상", lines: ["2호선", "김해선"] },
     { name: "서면", lines: ["1호선", "2호선"] },
-  ]
+  ];
 
   const isTransferStation = (station) => {
     return transferStations.some(
-      (st) =>
-        st.name === station.name && st.lines.includes(station.line)
+      (st) => st.name === station.name && st.lines.includes(station.line)
     );
-  }
+  };
 
   const tilelayer = new TileLayer({
     source: new XYZ({
@@ -290,21 +299,25 @@ function App() {
     source: combinedSource,
   });
 
-  const [map] = useState(new OlMap({
-    controls: defaults({ zoom: false, rotate: false, attribution: false }),
-    layers: [tilelayer, vectorLayer],
-    view: new View({
-      center: fromLonLat([129.059556, 35.158282]), // 서면역
-      zoom: 12,
-      maxZoom: 15,
-      minZoom: 11,
-    }),
-  }));
+  const [map] = useState(
+    new OlMap({
+      controls: defaults({ zoom: false, rotate: false, attribution: false }),
+      layers: [tilelayer, vectorLayer],
+      view: new View({
+        center: fromLonLat([129.059556, 35.158282]), // 서면역
+        zoom: 12,
+        maxZoom: 15,
+        minZoom: 11,
+      }),
+    })
+  );
 
   useEffect(() => {
-    if(currentStation !== null && map){
+    if (currentStation !== null && map) {
       const center = fromLonLat([currentStation.lon, currentStation.lat]);
-      map.getView().animate({ center, duration: 300, ease: 'easeOut', zoom: 13.5 });
+      map
+        .getView()
+        .animate({ center, duration: 300, ease: "easeOut", zoom: 13.5 });
     }
   }, [currentStation]);
 
@@ -314,12 +327,12 @@ function App() {
         feature.get("name") === station.name &&
         feature.get("line") === station.line
       ) {
-        const color = lineInfo.filter((line) => line.name === station.line)[0].color;
-
+        const color = lineInfo.filter((line) => line.name === station.line)[0]
+          .color;
         const newStyle = new Style({
           image: new CircleStyle({
             radius: 3,
-            fill: new Fill({color: color}),
+            fill: new Fill({ color: color }),
             stroke: new Stroke({
               color: color,
               width: 3,
@@ -327,12 +340,15 @@ function App() {
           }),
           text: new Text({
             fill: new Fill({ color: "black" }),
+            stroke: new Stroke({
+              color: "white",
+              width: 2,
+            }),
             offsetY: -15,
             text: station.name,
           }),
         });
         feature.setStyle(newStyle);
-        console.log(newStyle.getImage());
       }
     });
   };
@@ -392,7 +408,6 @@ function App() {
     setCorrectCount(newCorrectCount);
 
     setStations(updatedStations);
-
   };
 
   const keyboardEnter = (e) => {
@@ -440,19 +455,18 @@ function App() {
       } catch {
         color = "black";
       }
-      if (isTransferStation(station)){
+      if (isTransferStation(station)) {
         pointFeature.setStyle(
           new Style({
             image: new Icon({
-            anchor: [0.5,0.5],
-            src: 'icons/transfer.svg',
-            scale: 0.02
+              anchor: [0.5, 0.5],
+              src: "icons/transfer.svg",
+              scale: 0.02,
             }),
             zIndex: 3,
           })
-        )
-      }
-      else{
+        );
+      } else {
         pointFeature.setStyle(
           new Style({
             image: new CircleStyle({
@@ -462,7 +476,7 @@ function App() {
                 color: color,
                 width: 2,
               }),
-            })
+            }),
           })
         );
       }
@@ -503,22 +517,20 @@ function App() {
     }
   };
 
-    
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.ctrlKey && event.shiftKey && event.key === 'M') {
+      if (event.ctrlKey && event.shiftKey && event.key === "M") {
         setCorrectCount(totalCount); // 모든 문제를 맞춘 상태로 변경
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, [totalCount]);
 
   useEffect(() => {
     map.setTarget(mapRef.current || "");
     loadData();
-
   }, []);
 
   useEffect(() => {
@@ -526,16 +538,16 @@ function App() {
     drawLines();
   }, [stations]);
 
-    //개발자용 치트
+  //개발자용 치트
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.ctrlKey && event.shiftKey && event.key === 'M') {
+      if (event.ctrlKey && event.shiftKey && event.key === "M") {
         setCorrectCount(totalCount); // 모든 문제를 맞춘 상태로 변경
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, [totalCount]);
 
   return (
@@ -559,7 +571,6 @@ function App() {
           <NotificationContainer />
           <BuyMeCoffee />
           <DeveloperInfo />
-          <Success correctCount={correctCount} totalCount={totalCount} />
         </div>
       </div>
     </>
