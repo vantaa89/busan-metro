@@ -23,68 +23,75 @@ import "react-notifications/lib/notifications.css";
 import JSConfetti from "js-confetti";
 
 function StatusWindow({ stations, correctCount, totalCount, lineInfo }) {
+  const [collapse, setCollapse] = useState(false);
   return (
-    <div className="statusBox">
-      <div className="progressBars">
-        <div id="progressTitle">
-          <p style={{ fontSize: "20px" }}>Total</p>
-          <p style={{ fontSize: "20px", textAlign: "right" }}>
-            {(
-              (correctCount.reduce((a, b) => a + b, 0) /
-                totalCount.reduce((a, b) => a + b, 0)) *
-              100
-            ).toFixed(2)}{" "}
-            %{" "}
-          </p>
-        </div>
-
-        <div id="totalProgressBar">
-          <div
-            id="totalProgress"
-            style={{
-              width:
+    <>
+      <div className="statusBox">
+        <button id="collapseBtn" 
+          style={{color: "#666"}}
+        onClick={() => setCollapse(!collapse)}>{collapse?"\u25b2":"\u25bc"}</button>
+      {collapse || 
+        <div className="progressBars">
+          <div id="progressTitle">
+            <p style={{ fontSize: "20px" }}>Total</p>
+            <p style={{ fontSize: "20px", textAlign: "right" }}>
+              {(
                 (correctCount.reduce((a, b) => a + b, 0) /
                   totalCount.reduce((a, b) => a + b, 0)) *
-                  100 +
-                "%",
-            }}
-          ></div>
-        </div>
+                100
+              ).toFixed(2)}{" "}
+              %{" "}
+            </p>
+          </div>
 
-        {Array.isArray(lineInfo) &&
-          lineInfo.map((item, i) => (
-            <>
-              <div className="lineIndex">
-                <img
-                  src={"icons/" + item.code + ".svg"}
-                  className="lineIcon"
-                ></img>
-                <p>{item.name}</p>
-                <p style={{ textAlign: "right", color: "gray" }}>
-                  {correctCount[i]} / {totalCount[i]}
-                </p>
-              </div>
-              <div className="progressBar">
-                <div
-                  className="progress"
-                  id={item.code + "Progress"}
-                  style={{
-                    width: (correctCount[i] / totalCount[i]) * 100 + "%",
-                    backgroundColor:
-                      "rgb(" +
-                      lineInfo[i].color[0] +
-                      "," +
-                      lineInfo[i].color[1] +
-                      "," +
-                      lineInfo[i].color[2] +
-                      ")",
-                  }}
-                ></div>
-              </div>
-            </>
-          ))}
+          <div id="totalProgressBar">
+            <div
+              id="totalProgress"
+              style={{
+                width:
+                  (correctCount.reduce((a, b) => a + b, 0) /
+                    totalCount.reduce((a, b) => a + b, 0)) *
+                    100 +
+                  "%",
+              }}
+            ></div>
+          </div>
+
+          {Array.isArray(lineInfo) &&
+            lineInfo.map((item, i) => (
+              <>
+                <div className="lineIndex">
+                  <img
+                    src={"icons/" + item.code + ".svg"}
+                    className="lineIcon"
+                  ></img>
+                  <p>{item.name}</p>
+                  <p style={{ textAlign: "right", color: "gray" }}>
+                    {correctCount[i]} / {totalCount[i]}
+                  </p>
+                </div>
+                <div className="progressBar">
+                  <div
+                    className="progress"
+                    id={item.code + "Progress"}
+                    style={{
+                      width: (correctCount[i] / totalCount[i]) * 100 + "%",
+                      backgroundColor:
+                        "rgb(" +
+                        lineInfo[i].color[0] +
+                        "," +
+                        lineInfo[i].color[1] +
+                        "," +
+                        lineInfo[i].color[2] +
+                        ")",
+                    }}
+                  ></div>
+                </div>
+              </>
+            ))}
+        </div>}
       </div>
-    </div>
+    </>
   );
 }
 
@@ -541,7 +548,6 @@ function App() {
   return (
     <>
       <div className="App">
-        <div className="map" ref={mapRef}>
           <div id="inputBox">
             <input
               id="inputWindow"
@@ -549,6 +555,7 @@ function App() {
               ref={inputRef}
             />
           </div>
+        <div className="map" ref={mapRef}>
           <div id="result"></div>
           <StatusWindow
             stations={stations}
