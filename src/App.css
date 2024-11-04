@@ -269,6 +269,58 @@
     height: 40px;
     border-radius: 10px;
   }
+  
+  #coffeemodal-content {
+    position: relative;
+    z-index: 4;
+    width: 250px;
+    height: 500px;
+    top: 150px;
+    border-radius: 20px 20px 20px 20px;
+    background-color: white;
+    align-items: center;
+  }
+
+  #infomodal-content {
+    position: relative;
+    display: flex;
+    z-index: 4;
+    width: 400px;
+    height: 400px;
+    top: 150px;
+    border-radius: 20px 20px 20px 20px;
+    background-color: white;
+    justify-content: center;
+  }
+  
+  #infogrid {
+    display: grid;
+    width: 250px;
+    margin-top: 20px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 70px 20px 150px 40px 40px 40px;
+    justify-content: center;
+    align-items: center;
+    column-gap: 50px;
+  }
+  
+  .developerimg {
+    width: 130px;
+    height: auto;
+    place-self: center;
+    border-radius: 50%;
+  }
+
+  #successmodal-content {
+    position: relative;
+    z-index: 4;
+    width: 500px;
+    height: 500px;
+    top: 150px;
+    border-radius: 20px 20px 20px 20px;
+    background-color: white;
+    justify-content: center;
+  }
 }
 
 @media (min-width: 600px){

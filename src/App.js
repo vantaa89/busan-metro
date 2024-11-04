@@ -204,11 +204,7 @@ function DeveloperInfo() {
                 
               </p>
               <p style={{ textAlign: "left", fontSize: "12px" }}>
-                -Son of Busan Metropolitan City
-              </p>
-              <p style={{ textAlign: "left", fontSize: "12px" }}></p>
-              <p style={{ textAlign: "left", fontSize: "12px" }}>
-                -shin5475612@gmail.com
+                shin5475612@gmail.com
               </p>
               <p style={{ textAlign: "left", fontSize: "12px" }}></p>
             </div>
